@@ -1,0 +1,63 @@
+#containerInteviewSchedule.panel.panel-default
+  .panel-body
+    h4 Candidate Status
+    .well.col-md-12
+      ul.list-unstyled
+        li ng-repeat="status in account.statuses.candidate"
+          .glyphicon.glyphicon-remove-circle ng-click="deleteStatus(status)" ng-hide="editCandidateStatusForm.$visible" ng-disabled="status.is_locked || status.default"
+          .glyphicon.glyphicon-edit ng-click="editCandidateStatusForm.$show()" ng-hide="editCandidateStatusForm.$visible"
+          label
+            input type="checkbox" ng-model="status.active" ng-change='updateStatus(status)' ng-hide="editCandidateStatusForm.$visible" ng-disabled="status.is_locked || status.default"
+          label
+            span editable-text="status.name" e-form="editCandidateStatusForm" onbeforesave="validateStatus($data, 'candidate')" onaftersave="updateStatus(status)"
+              | {{status.name}}
+          button.btn.btn-info.btn-xs type="button" ng-disabled="status.default" ng-click="setAsDefault(status)"
+            | Default
+
+      button.btn.btn-xs ng-click="newCandidateStatusForm.$show()" ng-hide="newCandidateStatusForm.$visible" 
+        i.glyphicon.glyphicon-plus
+      span editable-text="new_status" e-form="newCandidateStatusForm" onbeforesave="validateStatus($data, 'candidate')" onaftersave="createStatus($data, 'candidate')"
+      span ng-click="newCandidateStatusForm.$show()" ng-hide="newCandidateStatusForm.$visible"
+        | Click to add new Candidate Status
+
+  .panel-body
+    h4 Candidate Interviewing State
+    .well.col-md-12
+      ul.list-unstyled
+        li ng-repeat="status in account.statuses.interview"
+          .glyphicon.glyphicon-remove-circle ng-click="deleteStatus(status)" ng-hide="editInterviewStateForm.$visible" ng-disabled="status.is_locked || status.default"
+          .glyphicon.glyphicon-edit ng-click="editInterviewStateForm.$show()" ng-hide="editInterviewStateForm.$visible"
+          label
+            input type="checkbox" ng-model="status.active" ng-change='updateStatus(status)' ng-hide="editInterviewStateForm.$visible" ng-disabled="status.is_locked || status.default"
+          label
+            span editable-text="status.name" e-form="editInterviewStateForm" onbeforesave="validateStatus($data, 'interview')" onaftersave="updateStatus(status)"
+              | {{status.name}}
+          button.btn.btn-info.btn-xs type="button" ng-disabled="status.default" ng-click="setAsDefault(status)"
+            | Default
+
+      button.btn.btn-xs ng-click="newInterviewStateForm.$show()" ng-hide="newInterviewStateForm.$visible" 
+        i.glyphicon.glyphicon-plus
+      span editable-text="new_status" e-form="newInterviewStateForm" onbeforesave="validateStatus($data, 'interview')" onaftersave="createStatus($data, 'interview')"
+      span ng-click="newInterviewStateForm.$show()" ng-hide="newInterviewStateForm.$visible"
+        | Click to add new Interview Status
+
+  .panel-body
+    h4 Job Status
+    .well.col-md-12
+      ul.list-unstyled
+        li ng-repeat="status in account.statuses.job"
+          .glyphicon.glyphicon-remove-circle ng-click="deleteStatus(status)" ng-hide="editJobStatusForm.$visible" ng-disabled="status.is_locked || status.default"
+          .glyphicon.glyphicon-edit ng-click="editJobStatusForm.$show()" ng-hide="editJobStatusForm.$visible"
+          label
+            input type="checkbox" ng-model="status.active" ng-change='updateStatus(status)' ng-hide="editJobStatusForm.$visible" ng-disabled="status.is_locked || status.default"
+          label
+            span editable-text="status.name" e-form="editJobStatusForm" onbeforesave="validateStatus($data, 'job')" onaftersave="updateStatus(status)"
+              | {{status.name}}
+          button.btn.btn-info.btn-xs type="button" ng-disabled="status.default" ng-click="setAsDefault(status)"
+            | Default
+
+      button.btn.btn-xs ng-click="newJobStatusForm.$show()" ng-hide="newJobStatusForm.$visible" 
+        i.glyphicon.glyphicon-plus
+      span editable-text="new_status" e-form="newJobStatusForm" onbeforesave="validateStatus($data, 'job')" onaftersave="createStatus($data, 'job')"
+      span ng-click="newJobStatusForm.$show()" ng-hide="newJobStatusForm.$visible"
+        | Click to add new Job Status

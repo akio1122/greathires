@@ -1,0 +1,38 @@
+#interviewGuides
+  h3.text-center Assign  {{account.job_skills_label}}  to Interview Guides
+  .col-md-12 ng-show='skills.isEmpty() && isSkillLoaded' 
+    .warning-message.text-center
+      h3 You have no  {{account.job_skills_label}}  added.
+      p Please add Job Skill(s) by clicking the button on the left
+      p.arrow &#8592
+
+  .form-group ng-hide='skills.isEmpty()' 
+    label How many Interview Guides do you want to create for this job?
+    /!%a{href: "#", 'editable-select': "job.interview_guides_count", 'e-ng-options': "n.value as n.label for n in numbers"}
+
+    select.form-controll ng-change='updateInterviewGuidesCounts()' ng-model='job.interview_guides_count' ng-options='number for number in numbers' 
+      option value='' None
+
+  .col-md-12 ng-show='job.interview_guides_count > 0 && !skills.isEmpty()' 
+    h4.text-center Drag and drop an Interview Guide to assign a  {{account.job_skills_label}}
+
+  .col-md-12 ng-show='job.interview_guides_count > 0 && !skills.isEmpty()' 
+    .col-md-6
+      h3 Interview Guides
+      ul.list-unstyled.interview-guides
+        li ng-repeat='item in interview_guides' ng-show="item.title" data-drag="true" data-jqyoui-options="{revert: 'invalid', helper: 'clone'}" ng-model="interview_guides" jqyoui-draggable="{index: {{$index}}, placeholder: 'keep'}" 
+          | {{generateInterviewGuideTitle(item.num)}}
+
+    .col-md-6
+      h3 
+        | {{account.job_skills_label}} 
+      .row
+        ul.list-unstyled.skills.col-md-12 ng-repeat="skill in skills" 
+          li
+            h4 
+              | {{skill.name}} 
+
+            ul.list-unstyled.interview-guides.col-md-8 data-drop="true" jqyoui-droppable="{multiple:true}" ng-model="skill.interview_guides" 
+              li data-drag="true" data-jqyoui-options="{revert: 'invalid', helper: 'clone'}" jqyoui-draggable="{index: {{$index}},animate:true,onDrop: saveInterviewGuide(skill)}" ng-model="skill.interview_guides" ng-repeat="item in skill.interview_guides track by $index" 
+                .remove.glyphicon.glyphicon-remove-circle ng-click='removeInterviewGuide(item, skill)' 
+                | {{generateInterviewGuideTitle(item.num)}}

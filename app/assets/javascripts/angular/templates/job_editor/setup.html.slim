@@ -1,0 +1,66 @@
+#containerJobSetup.panel.panel-default
+  .panel-body
+    .well
+      form name="form" show-validation="true" 
+        fieldset ng-disabled="!can_edit"
+          .row
+            .col-md-2
+              label.form-label.required for="name" Job Title
+            .col-md-4
+              input.form-control name="name" type="text" ng-model="resource.name" auto-focus="true" ng-blur="update(resource, $event)" 
+              span.help-block ng-show="form.name.$invalid && form.name.$dirty" 
+                ul
+                  li ng-repeat="item in validation_errors['name']" ng-bind="item" 
+            .col-md-2
+              label.form-label.required for="requisition_ref" Job Req#
+            .col-md-4
+              input.form-control name="requisition_ref" type="text" ng-model="resource.requisition_ref" ng-blur="update(resource, $event)" 
+              span.help-block ng-show="form.requisition_ref.$invalid && form.requisition_ref.$dirty" 
+                ul
+                  li ng-repeat="item in validation_errors['requisition_ref']" ng-bind="item" 
+
+          hr
+          .row
+            .col-md-2
+              label.form-label for="job_status" Job Status
+            .col-md-4
+              select.form-control ng-model="resource.status_id" ng-options="item.id as item.name for item in account.job_statuses" ng-model-options="{ updateOn: 'default' }" ng-change="update(resource, $event)" 
+          hr
+          h4.text-center 
+            | {{job_specification}}
+
+          .classifications ng-init="getClassifications()" 
+            div ng-repeat="classification in classifications" 
+              div ng-switch="" on="$index % 2" 
+                .row.form-group ng-switch-when="0" 
+                  .col-md-2
+                    label.form-label for=""
+                      | {{ classification.name }}
+                  .col-md-4
+                    select.form-control ng-model="classifications[$index+0].selectedId" ng-options="item.id as item.name for item in classifications[$index+0].classification_options" ng-model-options="{ updateOn: 'default' }" ng-change="updateClassification(resource, classifications[$index+0].id, classifications[$index+0].selectedId)" 
+                  .col-md-2 ng-show="classifications[$index+1]" 
+                    label.form-label for=""
+                      | {{ classifications[$index+1].name }}
+                  .col-md-4 ng-show="classifications[$index+1]" 
+                    select.form-control ng-model="classifications[$index+1].selectedId" ng-options="item.id as item.name for item in classifications[$index+1].classification_options" ng-model-options="{ updateOn: 'default' }" ng-change="updateClassification(resource, classifications[$index+1].id, classifications[$index+1].selectedId)" 
+
+          .row.margin-tb ng-show="account.job_video_urls_enabled" 
+            .col-md-2
+              label.form-label for="video_url" Add Video (optional)
+            .col-md-8
+              .controls
+                input.form-control name="video_url" type="text" ng-model="resource.video_url" placeholder="YouTube Url" ng-blur="update(resource, $event)" 
+                span.help-block ng-show="form.video_url.$invalid && form.video_url.$dirty" 
+                  ul
+                    li ng-repeat="item in validation_errors['video_url']"
+                      | {{ item }} 
+          hr
+          .row.margin-tb
+            .col-md-2
+              label.form-label for="description" Job Description
+            .col-md-10
+              textarea.form-control name="description" ng-model="resource.description"  placeholder="Type or copy/paste Job Description here" rows="5" ng-blur="update(resource, $event)" 
+              span.help-block ng-show="form.description.$invalid && form.description.$dirty" 
+                ul
+                  li ng-repeat="item in validation_errors['description']"
+                  | {{ item }} 

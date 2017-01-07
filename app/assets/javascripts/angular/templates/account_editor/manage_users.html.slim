@@ -1,0 +1,40 @@
+#containerUsers.panel.panel-default
+  .panel-body
+    h4.text-center Manage Users
+    p This section allows account Managers edit or delete Account User and how they access the app. The Account Manager can grant permission to these user to add jobs. A user who can add a job may also be granted the ability to invite others to app.
+
+    .well.filters
+      h4.pull-left Users
+      label Filter
+      gh_filter.filter items="role_filter_items" current-value="current_role" is-open='is_open_role_filter' on-filter='filterByRole' 
+      gh_filter.filter items="status_filter_items" current-value="current_status" is-open='is_open_status_filter'on-filter='filterByStatus' 
+
+    .table-responsive
+      pagination.pagination-sm total-items="total_items" ng-model="current_page" max-size="max_size" num-pages="num_pages" ng-change="pageChanged()" items-per-page="items_per_page" 
+
+      table.table.users
+        thead
+          tr
+            th &nbsp;
+            th Name
+            th Email
+            th User Role
+            th Status
+            th Actions
+        tbody
+          tr ng-repeat='resource in resources' 
+            td
+              input type='checkbox' 
+            td
+              | {{resource.user.full_name}} 
+            td
+              | {{resource.user.email}} 
+            td
+              | {{resource.name}} 
+            td
+              select.form-controll ng-model='resource.status' ng-options='status.code as status.name for status in user_statuses' ng-change='updateResource(resource)' 
+            td.actions
+              span.glyphicon.glyphicon-pencil ng-click='editResource(resource)' 
+              span.glyphicon.glyphicon-remove ng-click='removeResource(resource)' 
+
+      pagination.pagination-sm total-items="total_items" ng-model="current_page" max-size="max_size" num-pages="num_pages" ng-change="pageChanged()" items-per-page="items_per_page" 

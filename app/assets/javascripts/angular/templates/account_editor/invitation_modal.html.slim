@@ -1,0 +1,28 @@
+.modal-header
+  h3.modal-title.text-center
+    | CREATE INVITATION
+    i.glyphicon.glyphicon-remove-circle.pull-right ng-click='closeModal()' 
+.modal-body
+  .alert ng-repeat="alert in alerts" type='{{alert.type}}' close="closeAlert($index)"
+    | {{alert.msg}}
+  form name='invitationForm' role="form" novalidate=true 
+    .form-horizontal
+      .form-group
+        label.col-sm-3.control-label.required First Name
+        div.col-sm-9
+          input.form-control type="text" id="first" ng-model="user.first" required=true 
+      .form-group
+        label.col-sm-3.control-label.required Last Name
+        div.col-sm-9
+          input.form-control type="text" id="last" ng-model="user.last" required=true 
+      .form-group
+        label.col-sm-3.control-label.required Email
+        div.col-sm-9
+          input.form-control type="text" id="email" ng-model="user.email" required=true 
+.modal-footer
+  div ng-if="isNew == true" 
+    button.btn.btn-primary ng-disabled="invitationForm.$invalid" ng-click="saveAndClose($event)"  Add User
+    button.btn.btn-warning ng-disabled="invitationForm.$invalid" ng-click="save($event)"  Save and Continue
+  div ng-if="isNew == false" 
+    button.btn.btn-primary ng-disabled="invitationForm.$invalid" ng-click="saveAndClose($event)"  Update
+    button.btn.btn-warning ng-disabled="invitationForm.$invalid" ng-click="closeModal()"  Close

@@ -1,0 +1,12 @@
+.ca-box
+  section.tab-list
+    ul.nav.nav-tabs.tab-dark.visible-xs
+      li ui-sref-active="active"
+        a ui-sref="app.prepare" Prepare
+      li ui-sref-active="active"
+        a ui-sref="app.interview" Interview
+      li ui-sref-active="active"
+        a ui-sref="app.evaluate" Evaluate
+    .tab-content
+      .tab-pane.fade.in.active.gh-interview
+        div ui-view=""

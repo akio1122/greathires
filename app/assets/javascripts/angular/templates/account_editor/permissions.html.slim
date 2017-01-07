@@ -1,0 +1,30 @@
+#containerUsers.panel.panel-default
+  .panel-body
+    h4.text-center Job (Hiring) Team Roles & Permissions
+    .text-center
+      a.btn.btn-primary.center ng-click="addRole()"
+        span.glyphicon.glyphicon-plus
+        | Add new Job Team Member Role
+    .well
+      .table-responsive
+        table.table
+          thead
+            tr
+              th &nbsp;
+              th ng-repeat="role in account.roles"
+                .glyphicon.glyphicon-remove-circle ng-if="!role.is_locked" ng-click="removeRole(role)" ng-hide="roleUpdateBtnForm.$visible"
+                .glyphicon.glyphicon-edit ng-if="!role.is_locked" ng-click="roleUpdateBtnForm.$show()" ng-hide="roleUpdateBtnForm.$visible"
+                span editable-text="role.name" e-form="roleUpdateBtnForm" onbeforesave="validateRole($data)" onaftersave="updateRole(role)"
+                  | {{role.name}}
+
+          tbody ng-repeat="permission_group in permission_groups"
+            tr
+              td.text-underline.text-bold
+                | {{permission_group}}
+              td ng-repeat="role in account.roles"
+                | &nbsp;
+            tr ng-repeat="permission in grouped_permissions[permission_group]"
+              td
+                | {{permission.description}}
+              td.text-center ng-repeat="role in account.roles"
+                input type='checkbox' ng-model="getRolePermission(permission, role).value" ng-change="updateRolePermission(getRolePermission(permission, role))" ng-disabled="getRolePermission(permission, role).is_locked"

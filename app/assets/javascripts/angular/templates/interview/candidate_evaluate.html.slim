@@ -1,0 +1,160 @@
+section.tab-list
+  ul#tab-list.nav.nav-tabs.tab-dark.visible-xs
+    li
+      a href="#/prepare"  Prepare
+    li
+      a href="#/interview"  Interview
+    li.active
+      a data-toggle="tab" href="#/evaluate"  Evaluate
+  .tab-content
+    #i-evaluate.tab-pane.fade.in.active
+      .cbox2
+        h3.ja-title.mt20
+          | Overall assessment
+          small
+            a Move Forward?
+        .d-view
+          p
+            select#assess-val.form-control
+              option value="1"  Option 2
+              option selected="" value="2"  Hire
+          p#assess-txt.h-hide
+            label.checkbox
+              input type="checkbox"  Preferred Candidate
+          p.collapse-inline
+            a.collapsed.note-link data-target="#addNoteInline" data-toggle="collapse"
+              i.fa.fa-plus-square
+              | Overall Comment
+            em visible to you, hiring and talent manager
+          #addNoteInline.collapse.col-inline
+            form
+              p.txt-note Note is visible to you, hiring and talent manager
+              p
+                textarea.form-control rows="1"
+              .row.mb30
+                span.col-xs-6
+                  button.btn.btn-block.btn-primary type="submit" Save Comment
+                span.col-xs-6
+                  button.btn.btn-block.btn-default.note-back data-target="#addNoteInline" data-toggle="collapse" type="button" Cancel
+    .eval-box
+      h3.title Evaluate Job Skills
+      section.e-box
+        h6.e-title Active Learning
+        .e-in
+          .slider-range
+            .sr-lbl.clearfix
+              span &nbsp;
+              span
+                em.ttip data-placement="top" data-toggle="tooltip" title="Definitely not acceptable" 1
+              span
+                em.ttip data-placement="top" data-toggle="tooltip" title="text 2" 2
+              span
+                em.ttip data-placement="top" data-toggle="tooltip" title="text 3" 3
+              span
+                em.ttip data-placement="top" data-toggle="tooltip" title="text 4" 4
+              span
+                em.ttip data-placement="top" data-toggle="tooltip" title="text 5" 5
+              span
+                em.ttip data-placement="top" data-toggle="tooltip" title="text 6" 6
+              span
+                em.ttip data-placement="top" data-toggle="tooltip" title="text 7" 7
+              span
+                em.ttip data-placement="top" data-toggle="tooltip" title="text 8" 8
+              span
+                em.ttip data-placement="top" data-toggle="tooltip" title="text 9" 9
+              span
+                em.ttip data-placement="top" data-toggle="tooltip" title="text 10" 10
+            #slider-range
+          p.collapse-inline
+            a.collapsed.note-link data-target="#addNoteInline1" data-toggle="collapse"
+              i.fa.fa-plus-square
+              | Comment
+            em visible to you, hiring and talent manager
+          #addNoteInline1.collapse.col-inline
+            form
+              p.txt-note Note is visible to you, hiring and talent manager
+              p
+                textarea.form-control rows="1"
+              .row.mb10
+                span.col-xs-6
+                  button.btn.btn-block.btn-primary type="submit"  Save Comment
+                span.col-xs-6
+                  button.btn.btn-block.btn-default.note-back data-target="#addNoteInline1" data-toggle="collapse" type="button"  Cancel
+    section.e-box
+      h5.e-title Business Acumen
+      p.e-chk.clearfix
+        label
+          input name="e1" type="radio" value="1"
+            span
+              em 1 Much more than Acceptable
+        label
+          input name="e1" type="radio" value="2"
+            span
+              em 2 More than Acceptable
+        label
+          input name="e1" type="radio" value="3"
+            span
+              em 3 Will Perform
+        label
+          input name="e1" type="radio" value="4"
+            span
+              em 4 Less than Acceptable
+        label
+          input checked="" name="e1" type="radio" value="5"
+            span
+              em 5 Much less than Acceptable
+      .e-in
+        p.collapse-inline
+          a.collapsed.note-link data-target="#addNoteInline2" data-toggle="collapse"
+            i.fa.fa-plus-square
+            | Comment
+          em visible to you, hiring and talent manager
+        #addNoteInline2.collapse.col-inline
+          form
+            p.txt-note Note is visible to you, hiring and talent manager
+            p
+              textarea.form-control rows="1"
+            .row.mb10
+              span.col-xs-6
+                button.btn.btn-block.btn-primary type="submit"  Save Comment
+              span.col-xs-6
+                button.btn.btn-block.btn-default.note-back data-target="#addNoteInline2" data-toggle="collapse" type="button"  Cancel
+    section.e-box
+      h5.e-title Commitment
+      p.e-chk.clearfix
+        label
+          input name="e2" type="radio" value="1"
+            span
+              em 1 Much more than Acceptable
+        label
+          input checked="" name="e2" type="radio" value="2"
+            span
+              em 2 More than Acceptable
+        label
+          input name="e2" type="radio" value="3"
+            span
+              em 3 Will Perform
+        label
+          input name="e2" type="radio" value="4"
+            span
+              em 4 Less than Acceptable
+        label
+          input name="e2" type="radio" value="5"
+            span
+              em 5 Much less than Acceptable
+      .e-in
+        p.collapse-inline
+          a.collapsed.note-link data-target="#addNoteInline3" data-toggle="collapse"
+            i.fa.fa-plus-square
+            | Comment
+          em visible to you, hiring and talent manager
+        #addNoteInline3.collapse.col-inline
+          form
+            p.txt-note Note is visible to you, hiring and talent manager
+            p
+              textarea.form-control rows="1"
+            .row.mb10
+              span.col-xs-6
+                button.btn.btn-block.btn-primary type="submit"  Save Comment
+              span.col-xs-6
+                button.btn.btn-block.btn-default.note-back data-target="#addNoteInline3" data-toggle="collapse" type="button"  Cancel

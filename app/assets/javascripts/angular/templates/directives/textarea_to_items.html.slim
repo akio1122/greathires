@@ -1,0 +1,7 @@
+div ng-show="show_items_textarea && can_edit" 
+  textarea.form-control ng-model="items_text" placeholder="Type or Copy/Paste here..." rows="8"
+  div.text-center
+    button.btn.btn-primary.margin-tb ng-click="saveBulkToItems()" 
+      | Save
+    button.btn.btn-warning.margin-tb.margin-left ng-click="show_items_textarea=!show_items_textarea" 
+      | Cancel

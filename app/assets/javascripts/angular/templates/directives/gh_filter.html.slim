@@ -1,0 +1,9 @@
+.btn-group dropdown="" is-open="is_open" 
+  button.btn.btn-primary.dropdown-toggle type="button" 
+    | {{current_value.name}}
+    span.caret
+  ul.dropdown-menu role="menu" 
+    /! | filter:{ name: !current_value.name }
+    li ng-repeat="item in items" ng-hide='item == current_value' 
+      a href='#' ng-click="onFilter(item, $event)"
+        | {{item.name}}

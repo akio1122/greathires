@@ -1,0 +1,58 @@
+.modal-header
+  h3.modal-title.text-center
+    | CREATE JOB
+    i.glyphicon.glyphicon-remove-circle.pull-right ng-click='closeModal()' 
+.modal-body
+  form name='jobForm' show-validation="true" ng-init="setFormScope(this)" 
+    input type="radio" id="create-new" name="new-job-type" ng-model="$parent.new_job_type" value="create" ng-change="chooseCreateJobType()" 
+      label for="create-new" Create New Job
+
+    hr
+    input type="radio" id="exists-template" name="new-job-type" ng-model="$parent.new_job_type" value="template" ng-change="chooseCreateJobType()" 
+      label for="exists-template" Copy an existing Job Template
+    div.form-horizontal ng-show="new_job_type=='template'" 
+      .form-group
+        label.col-sm-1
+        div.col-sm-10
+          input.form-control type="text" name='search_template' ng-model='$parent.search_text' placeholder="Search Job Templates" ng-keyup='searchTemplateSuggestions()' ng-blur='hideSuggestions()'  
+          ul.dropdown-menu.suggestions ng-show='!suggestions.isEmpty()' active="activeIdx" aria-hidden="false" role="listbox" 
+            li ng-repeat="suggestion in suggestions" ng-click="selectSuggestion(suggestion)" role="option" 
+              a
+                span
+                  | {{suggestion.name}} 
+
+    hr
+    input type="radio" id="past-job" name="new-job-type" ng-model="$parent.new_job_type" value="past" ng-change="chooseCreateJobType()" 
+      label for="past-job" Copy a Past Job
+    div.form-horizontal ng-show="new_job_type=='past'" 
+      .form-group
+        label.col-sm-1
+        div.col-sm-10
+          input.form-control type="text" name='search_pastjob' ng-model='$parent.search_text' placeholder="Search Past Jobs" ng-keyup='searchPastJobSuggestions()' ng-blur='hideSuggestions()'  
+          ul.dropdown-menu.suggestions ng-show='!suggestions.isEmpty()' active="activeIdx" aria-hidden="false" role="listbox" 
+            li ng-repeat="suggestion in suggestions" ng-click="selectSuggestion(suggestion)" role="option" 
+              a
+                span 
+                  | {{suggestion.name}} 
+    hr
+    div.form-horizontal
+      .form-group
+        label.col-sm-3.control-label.required Job Title
+        div.col-sm-9
+          input.form-control type="text" name="name" ng-model="$parent.job_title" ng-disabled="!is_selected" placeholder="Job Title goes here" 
+          span.help-block ng-show="form.jobForm.name.$invalid" 
+            ul
+              li ng-repeat="item in validation_errors['name']" 
+                | {{item}} 
+      .form-group
+        label.col-sm-3.control-label.required Job Req#
+        div.col-sm-9
+          input.form-control type="text" name="requisition_ref" ng-model="$parent.job_req" ng-disabled="!is_selected" placeholder="Job Req# goes here" 
+          span.help-block ng-show="form.jobForm.requisition_ref.$invalid" 
+            ul
+              li ng-repeat="msg in validation_errors.requisition_ref"
+                | {{msg}} 
+
+.modal-footer
+  button.btn.btn-warning ng-click="closeModal()" Cancel
+  button.btn.btn-primary ng-click="addJob()" Add Job

@@ -1,0 +1,41 @@
+section.sn-box id="interviewDetailNavigation"
+  header.c-profile
+    p.hidden-xs.back-nav
+      a.back-to href="../interviews"
+        i.fa.fa-angle-left
+        | My Interviews
+    ul.media-list.info-box
+      li.media
+        span.pull-left.c-img
+          img.media-object alt="" ng-src="{{job_candidate.candidate.linkedin_picture_url}}" width="80"
+        .media-body
+          .cp-top
+            h4.media-heading
+              a href="#" 
+                | {{job_candidate.candidate.full_name}}
+            p Title Company
+            p School Name
+          p.hidden-xs.pr-txt
+            a ui-sref="app.priorities"  Candidate Priorities
+          ul.nav.nav-pills
+            li
+              a data-target="#myProfile" data-toggle="modal" href="#"
+                i.fa.fa-linkedin
+            li
+              a href="#"
+                i.fa.fa-file-text
+            li
+              a href="#"
+                i.fa.fa-twitter
+            li.visible-xs ui-sref-active="active"
+              a ui-sref="app.priorities"
+                | Priorities
+                i.fa.fa-angle-right
+  nav.left-nav
+    ul#tab-list.hidden-xs
+      li ui-sref-active="active"
+        a ui-sref="app.prepare" Prepare
+      li ui-sref-active="active"
+        a ui-sref="app.interview" Interview
+      li ui-sref-active="active"
+        a ui-sref="app.evaluate" Evaluate

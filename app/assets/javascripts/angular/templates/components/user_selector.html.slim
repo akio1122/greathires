@@ -1,0 +1,131 @@
+script type="text/ng-template" id="suggestionTemplate.html"
+  a
+    span
+      | {{match.model.full_name_with_email}}
+
+.modal-header
+  h3.modal-title.text-center
+    span ng-if="isNew == true"
+      | Add {{entityLabel}}
+    span ng-if="isNew == false"
+      | Update {{entityLabel}}
+    i.glyphicon.glyphicon-remove-circle.pull-right ng-click='closeModal()'
+.modal-body
+  alert ng-repeat="alert in alerts" type='{{alert.type}}' close="closeAlert($index)"
+    | {{alert.msg}}
+  #userSelector.row
+    div.text-center ng-if='!isAuthenticatedToLinkedIn'
+      h3.text-center
+        | LinkedIn account is not authenticated or you need to refresh token
+      a.btn.btn-primary.connect-to-linked-in ng-href="{{getLinkedinUrl()}}"
+        | Connect to LinkedIn
+    /! user form
+    form.form-horizontal ng-if='isAuthenticatedToLinkedIn' name='userForm' role="form" novalidate="true" ng-class="{'col-md-6' : isLinkedInControlEnabled}" ng-init="setFormScope(this)"
+      .form-group ng-class="{ 'has-error' : userForm.last.$invalid && !userForm.last.$pristine }"
+        label.col-md-4.control-label for="last"  Last Name
+        .col-md-7
+          input#last.form-control type="text" name='last' required="true" ng-change='resetLinkedInSearchIfNeed()' ng-model='user.last' ng-model-options="{ updateOn='blur' }" ng-keyup='searchSuggestions("last", user.last)' ng-blur='hideSuggestions()'
+          ul.dropdown-menu.suggestions ng-show="isActiveBy('last') && !suggestions.isEmpty()" active="activeIdx" aria-hidden="false" role="listbox"
+            li role="option" ng-if="!existingUserSelectable"
+              a.label-danger
+                span
+                  | These persons are already associated with this account.
+            li ng-repeat="suggestion in suggestions" ng-click="selectSuggestion(suggestion)" role="option"
+              /! , "ng-class" => "{active: isActive($index) }", "ng-mouseenter" => "selectActive($index)"
+              a
+                span
+                  | {{suggestion.full_name_with_email}}
+
+          p.help-block ng-show="userForm.last.$invalid && !userForm.last.$pristine"
+            | Last Name can't be blank
+
+        i.glyphicon.glyphicon-ok ng-show="!userForm.last.$invalid"
+
+      .form-group ng-class="{ 'has-error' : userForm.first.$invalid && !userForm.first.$pristine }"
+        label.col-md-4.control-label for="first" First Name
+        .col-md-7
+          input#first.form-control type="text" name='first' required="true" ng-change='resetLinkedInSearchIfNeed()' ng-model='user.first' ng-keyup='searchSuggestions("first", user.first)' ng-blur='hideSuggestions()'
+          ul.dropdown-menu.suggestions ng-show='isActiveBy("first") && !suggestions.isEmpty()' active="activeIdx" aria-hidden="false" role="listbox"
+            li ng-if="!existingUserSelectable"
+              a.label-danger
+                span
+                  | These persons are already associated with this account.
+            li ng-repeat="suggestion in suggestions" ng-click="selectSuggestion(suggestion)" role="option"
+              /! , "ng-class" => "{active: isActive($index) }", "ng-mouseenter" => "selectActive($index)"
+              a
+                span
+                  | {{suggestion.full_name_with_email}}
+
+          p.help-block ng-show="userForm.first.$invalid && !userForm.first.$pristine"
+            | First Name can't be blank
+
+        i.glyphicon.glyphicon-ok ng-show="!userForm.first.$invalid"
+
+      .form-group ng-class="{ 'has-error' : userForm.email.$invalid && !userForm.email.$pristine && userForm.$error.emails }"
+        label.col-md-4.control-label for="email" Email
+        .col-md-7
+          input#email.form-control type="email" name="email" required="true" ng-model='user.email' ng-change='searchSuggestions("email", user.email)' check-email-on-blur="true"
+          ul.dropdown-menu.suggestions ng-show='isActiveBy("email") && !suggestions.isEmpty()' active="activeIdx" aria-hidden="false" role="listbox"
+            li ng-if="!existingUserSelectable"
+              a.label-danger
+                span
+                  | These persons are already associated with this account.
+            li ng-repeat="suggestion in suggestions" ng-click="selectSuggestion(suggestion)" role="option"
+              a
+                span
+                  | {{suggestion.full_name_with_email}}
+
+          p.help-block ng-show="userForm.$error.emails && !userForm.email.$pristine" Enter a valid email
+        i.glyphicon.glyphicon-ok ng-show="!userForm.email.$invalid"
+
+    /! profile details
+    .col-md-6 ng-if='isAuthenticatedToLinkedIn' ng-show="isFirstAndLastArePopulated()"
+      .linked-profile.col-md-12
+        label.control-label.no-linked-in-message ng-hide='user.linkedin_id' No LinkedIn Account associated
+        .pull-left ng-show='user.linkedin_id'
+          img.img-responsive.img-thumbnail ng-src='{{user.linkedin_profile.pictureUrl ? user.linkedin_profile.pictureUrl : "http://placehold.it/90x90"}}'
+        .pull-left ng-show='user.linkedin_id'
+          p
+            | {{user.linkedin_profile.firstName}} {{user.linkedin_profile.lastName}}
+          p
+            | {{user.linkedin_profile.headline}}
+          p
+            | {{user.linkedin_profile.currentPosition}}
+
+      .col-md-12
+        button.btn.btn-primary ng-show="isFirstAndLastArePopulated()" ng-click="findLinkedInProfile()"
+          | {{user.linkedin_id ? 'Change LinkedIn Profile' : 'Find LinkedIn Profile'}}
+
+    /! linkedin profiles list
+    .col-md-12.linkedIn-profiles ng-if='isLinkedInControlEnabled' ng-show="isFirstAndLastArePopulated() && isLinkiedInSearchActive"
+      h4.text-center ng-show='linkedin_profiles.isEmpty()'
+        | No LinkedIn Profiles found
+      table.table.table-hover ng-show='!linkedin_profiles.isEmpty()'
+        tbody
+          tr ng-repeat="profile in linkedin_profiles | limitTo:30"
+            td
+              button.btn ng-disabled='profile.id == user.linkedin_id' ng-click='linkProfileWithUser(profile)' Link
+            td
+              img.img-responsive.img-thumbnail ng-if='profile.pictureUrl' ng-src='{{profile.pictureUrl}}'
+              img.img-responsive.img-thumbnail ng-if='!profile.pictureUrl' ng-src='http://placehold.it/90x90'
+            td
+              a href="{{profile.publicProfileUrl}}"
+                | {{profile.firstName}} {{profile.lastName}}
+            /! $CurrentCompanyName
+            td
+              | {{profile.headline}}
+            /! $CurrentTitle
+            td &nbsp;
+
+.modal-footer ng-if='isAuthenticatedToLinkedIn'
+  div ng-if="isNew == true"
+    div ng-if="saveOnce == true"
+      button.btn.btn-primary ng-disabled="isInvalid()" ng-click="save(true)"  Save
+      button.btn.btn-warning ng-disabled="isInvalid()" ng-click="closeModal()"  Close
+    div ng-if="saveOnce == false"
+      button.btn.btn-primary ng-disabled="isInvalid()" ng-click="save(true)" Add this {{entityLabel}}
+      button.btn.btn-warning ng-disabled="isInvalid()" ng-click="save()" Save and add another {{entityLabel}}
+
+  div ng-if="isNew == false"
+    button.btn.btn-primary ng-disabled="isInvalid()" ng-click="save(true)"  Update
+    button.btn.btn-warning ng-disabled="isInvalid()" ng-click="closeModal()"  Close

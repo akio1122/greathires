@@ -1,0 +1,102 @@
+.modal-header
+  h3.modal-title.text-center
+    | Add interviewer or break
+    i.glyphicon.glyphicon-remove.pull-right ng-click='closeModal()' 
+.modal-body
+  .clearfix
+    .col-sm-8.col-sm-offset-2
+      alert ng-repeat="alert in alerts" type='{{alert.type}}' close="closeAlert($index)" 
+        | {{alert.msg}}
+
+      form name='interviewForm' show-validation="true" ng-init="setFormScope(this)" 
+        .form-group.clearfix
+          .pull-left This is {{currentInterviewOption}}
+
+          span.dropdown.pull-right is-open="$parent.opened" 
+            a.dropdown-toggle href="" 
+              | More Options
+              i.fa.fa-sort-down
+            ul.dropdown-menu
+              li ng-class="{'active' : interview.interview_type_id == null}"
+                a tabindex="-1" ng-click="chooseInterviewOption()" Interview
+              li ng-class="{'active' : option.id == interview.interview_type_id}" ng-repeat="option in interview_options" ng-click="chooseInterviewOption(option)"
+                a
+                  | {{option.name}}
+
+        .form-group ng-hide="interview.interview_type_id != null"
+          a.btn.btn-default ng-hide="interview.interviewer" ng-click="chooseInterviewer()" Pick Interviewer
+          span ng-show="interview.interviewer"
+            | {{interview.interviewer.first}} {{interview.interviewer.last}} &nbsp;
+            p 
+              a ng-click="chooseInterviewer()" Choose another
+
+          span.text-danger ng-show="interviewerPicked == false" Pick an interviewer
+
+        .form-group
+          label.control-label Interview Round
+          select.form-control name="interview_round" ng-model="interview.interview_round_id"
+            option ng-repeat="item in interview_rounds" value="{{item.id}}" ng-selected="item.id == interview.interview_round.id || $index==0"
+              | {{item.name}}
+
+        .form-group
+          button.btn.btn-default ng-click="openDatepicker($event)" type="button" 
+            span ng-if="interview.scheduled_at == null" Pick a date
+            span ng-if="interview.scheduled_at != ''"
+              | {{interview.scheduled_at | date:'yyyy-MM-dd'}} 
+            i.fa.fa-sort-down
+          input.form-control.hide close-text="Close" datepicker-popup="yyyy-MM-dd" is-open="$parent.pickerOpened" ng-model="interview.scheduled_at" show-weeks="false" ng-required="true" type="text"
+
+        .form-group
+          label.control-label Time
+          .form-inline
+            select.form-control ng-model="start_time.hour"
+              option ng-repeat="hour in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]" value="{{hour}}" ng-selected="hour == start_time.hour"
+                | {{hour}}
+            select.form-control ng-model="start_time.min"
+              option ng-repeat="min in ['00', '15', '30', '45']" value="{{min}}" ng-selected="min == start_time.min"
+                | {{min}}
+            .btn-group
+              button.btn type="button" ng-click="start_time.meridian='AM'" ng-class="{'btn-default' : start_time.meridian != 'AM'}" AM
+              button.btn type="button" ng-click="start_time.meridian='PM'" ng-class="{'btn-default' : start_time.meridian != 'PM'}" PM
+
+        .form-group
+          label.control-label Length
+          .row
+            .col-sm-6
+              select.form-control name="minutes_long" ng-model="interview.minutes_long"
+                option ng-repeat="i in [15, 30, 45, 60, 75, 90]" value="{{i}}" ng-selected="i == interview.minutes_long"
+                  | {{i}} min
+
+        .form-group
+          label.control-label Timezone
+
+          timezone-select name="timezone_name" ng-model="interview.timezone_name"
+
+        .form-group
+          label.control-label Location
+          input.form-control type="text" name="location" ng-model="interview.location"
+        .form-group
+          label.control-label Office Phone
+          input.form-control type="text" name="office_phone" ng-model="interview.office_phone" placeholder="(999) 999-9999" input-mask-phone=""
+        .form-group
+          label.control-label Mobile Phone
+          input.form-control type="text" name="mobile_phone" ng-model="interview.mobile_phone" placeholder="(999) 999-9999" input-mask-phone=""
+        .form-group
+          label.control-label Administrative Assistant email
+          p
+            small
+              em Sends interview notification and calendar meeting to both interviewer and their assistant
+          input.form-control type="text" name="administrative_assistant_email" ng-model="interview.administrative_assistant_email"
+
+        .form-group ng-if="canAddHiringManagerNote"
+          label.control-label Hiring Managers' Notes to the Interviewer
+          textarea.form-control rows="3" name="hiring_manager_note" ng-model="interview.hiring_manager_note"
+
+
+.modal-footer
+  div ng-if="isNew"
+    button.btn.btn-primary.pull-left ng-click="save()" Save 
+    button.btn.btn-primary.pull-left ng-click="save(false)" Save and Continue
+  div ng-if="!isNew"
+    button.btn.btn-primary.pull-left ng-click="save()" Update 
+  button.btn.btn-warning.pull-right ng-click="closeModal()" Close 

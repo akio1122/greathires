@@ -1,0 +1,19 @@
+#containerInvitations.panel.panel-default
+  .panel-body
+    h3.text-center Email Invitations
+    h4.bottom-line
+      | User Invitation
+    label Email Subject
+    input.form-control type="text" ng-model="invitation_template.subject" ng-blur="saveInvitationEmailTemplate()" 
+
+    label Email Body
+    textarea.form-control ng-model="invitation_template.body" ng-blur="saveInvitationEmailTemplate()" rows=5 
+    hr
+    h4.bottom-line
+      | Job Team Member Notification
+    
+    label Email Subject
+    input.form-control type="text" ng-model="notification_template.subject" ng-blur="saveNotificationEmailTemplate()" 
+
+    label Email Body
+    textarea.form-control ng-model="notification_template.body" ng-blur="saveNotificationEmailTemplate()" rows=5 

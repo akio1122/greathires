@@ -1,0 +1,144 @@
+#containerJobSpeq.panel.panel-default
+  h4.text-center Job Specification
+
+  .panel-body
+    p Set-Up Job Classification Specification Controls:
+    .well
+      ul.list-unstyled.classifications
+        li ng-repeat="classification in account.classifications"
+          .glyphicon.glyphicon-remove-circle ng-click="deleteClassification(classification)" ng-hide="editClassificationForm.$visible"
+          label
+            input type="checkbox" ng-model="classification.active" ng-change='updateClassification(classification)' ng-hide="editClassificationForm.$visible"
+          label
+            span editable-text="classification.name" e-form="editClassificationForm" onbeforesave="validateClassification($data)" onaftersave="updateClassification(classification)"
+              | {{classification.name}}
+          .glyphicon.glyphicon-edit ng-click="editClassificationForm.$show()" ng-hide="editClassificationForm.$visible"
+          ul.list-unstyled.classification_options style="margin-left: 15px;"
+            li ng-repeat="option in classification.classification_options"
+              .glyphicon.glyphicon-remove-circle ng-click="deleteClassificationOption(option, classification.id)" ng-hide="editClassificationOptionForm.$visible"
+              label
+                span editable-text="option.name" e-form="editClassificationOptionForm" onbeforesave="validateClassificationOption($data, classification.id)" onaftersave="updateClassificationOption(option)"
+                  | {{option.name}}
+              .glyphicon.glyphicon-edit ng-click="editClassificationOptionForm.$show()" ng-hide="editClassificationOptionForm.$visible"
+
+          button.btn.btn-xs style="margin-left: 15px;" ng-click="newClassificationOptionForm.$show()" ng-hide="newClassificationOptionForm.$visible" 
+            i.glyphicon.glyphicon-plus
+
+          span editable-text="$parent.new_classification_option" e-form="newClassificationOptionForm" onbeforesave="validateClassificationOption($data, classification.id)" onaftersave="createClassificationOption($data, classification.id)"
+          span ng-click="newClassificationOptionForm.$show()" ng-hide="newClassificationOptionForm.$visible"
+            | Add item to list
+
+      button.btn.btn-xs ng-click="newClassificationForm.$show()" ng-hide="newClassificationForm.$visible" 
+        i.glyphicon.glyphicon-plus
+      span editable-text="new_classification" e-form="newClassificationForm" onbeforesave="validateClassification($data)" onaftersave="createClassification($data)"
+      span ng-click="newClassificationForm.$show()" ng-hide="newClassificationForm.$visible"
+        | Add Classification
+
+  .panel-body
+    p Make YouTube Available:
+    .well
+      .checkbox
+        label
+          input type="checkbox" name="job_video_urls_enabled" ng-model="account.job_video_urls_enabled" ng-change="updateAccountPreferences()" ng-checked="account.job_video_urls_enabled"
+          | Allow Video URLs
+  .panel-body
+    p Job Specification categories to display:
+    .well
+      .form-horizontal.col-md-12
+        .form-group
+          label.control-label.pull-left for='job_spec_categories_label'
+            | Label
+          .col-md-8
+            input#job_spec_categories_label.form-control name='job_spec_categories_label' type='text' ng-model="account.job_spec_categories_label" ng-blur="updateAccountPreferences()"
+      ul.list-unstyled
+        li ng-repeat="specification in account.specifications"
+          .glyphicon.glyphicon-remove-circle ng-click="deleteSpecification(specification)" ng-hide="editSpecificationForm.$visible"
+          label
+            input type="checkbox" ng-model="specification.active" ng-change='updateSpecification(specification)' ng-hide="editSpecificationForm.$visible"
+          label
+            span editable-text="specification.name" e-form="editSpecificationForm" onbeforesave="validateSpecification($data)" onaftersave="updateSpecification(specification)"
+              | {{specification.name}}
+          .glyphicon.glyphicon-edit ng-click="editSpecificationForm.$show()" ng-hide="editSpecificationForm.$visible"
+
+      button.btn.btn-xs ng-click="newSpecificationForm.$show()" ng-hide="newSpecificationForm.$visible" 
+        i.glyphicon.glyphicon-plus
+      span editable-text="new_specification" e-form="newSpecificationForm" onbeforesave="validateSpecification($data)" onaftersave="createSpecification($data)"
+      span ng-click="newSpecificationForm.$show()" ng-hide="newSpecificationForm.$visible"
+        | Add Another Job Specifications
+
+  .panel-body
+    p Features to display for Job Specification Categories:
+    .well
+      .row
+        .col-md-6
+          .radio
+            label
+              input#not-ratable type="radio" name="job_spec_large_text_field_type" ng-value="false" ng-model='account.job_spec_large_text_field_type' ng-change="updateJobSpecificationsFeatures()" ng-checked="!account.job_spec_large_text_field_type" 
+              | Large Text Field
+          .radio
+            label
+              input#ratable type="radio" name="job_spec_large_text_field_type" ng-value="true" ng-model='account.job_spec_large_text_field_type' ng-change="updateJobSpecificationsFeatures()" ng-checked="account.job_spec_large_text_field_type" 
+              | Large Text Field items can be Ratable
+
+          /! If 'Large Text Field items can be Ratable' is selected then AM can select one of the following rating types
+          .row
+            .col-md-6
+              p.text-center Rating Type:
+            .col-md-6
+              .radio
+                label
+                  input#thumbs-up type="radio" name="job_spec_large_text_field_rating_type" value="thumbs-up" ng-model="account.job_spec_large_text_field_rating_type" ng-change="updateJobSpecificationsFeatures()" ng-checked="account.job_spec_large_text_field_rating_type == 'thumbs-up'" ng-disabled="!account.job_spec_large_text_field_type" 
+                  | Thumbs Up
+              .radio
+                label
+                  input#thumbs-up-down type="radio" name="job_spec_large_text_field_rating_type" value="thumbs-up-down" ng-model="account.job_spec_large_text_field_rating_type" ng-change="updateJobSpecificationsFeatures()" ng-checked="account.job_spec_large_text_field_rating_type == 'thumbs-up-down'" ng-disabled="!account.job_spec_large_text_field_type" 
+                  | Thumbs Up/Down
+              .radio
+                label
+                  input#checkboxes type="radio" name="job_spec_large_text_field_rating_type" value="checkboxes" ng-model="account.job_spec_large_text_field_rating_type" ng-change="updateJobSpecificationsFeatures()" ng-checked="account.job_spec_large_text_field_rating_type == 'checkboxes'" ng-disabled="!account.job_spec_large_text_field_type" 
+                  | Checkboxes
+          .checkbox
+            label
+              input#allows_sub_traits type="checkbox" name="job_spec_text_field_allows_sub_bullets" ng-change="updateJobSpecificationsFeatures()" ng-checked="account.job_spec_text_field_allows_sub_bullets" ng-model='account.job_spec_text_field_allows_sub_bullets' 
+              | Text Field allows Sub-Bullets
+
+        .col-md-6
+          .checkbox
+            label
+              input#questions type="checkbox" name="job_spec_questions_enabled" ng-change="updateJobSpecificationsFeatures()" ng-checked="account.job_spec_questions_enabled" ng-model="account.job_spec_questions_enabled" 
+              | Questions
+          - isQuestionsDisabled = !@job_spec_questions_enabled
+          .col-md-offset-1
+            /! If 'Questions' are enabled then AM can enable 'Questions are numbered'
+            .checkbox
+              label
+                input#questions type="checkbox" name="job_spec_questions_numbered" ng-value="checkboxes" ng-model="account.job_spec_questions_numbered" ng-change="updateJobSpecificationsFeatures()" ng-checked="account.job_spec_questions_numbered && account.job_spec_questions_enabled" ng-disabled="!account.job_spec_questions_enabled" 
+                | Questions are numbered
+            /! If 'Questions' are enabled then AM can select either 'Questions Text Field - not ratable'' (default selection)
+            .radio
+              label
+                input#not-ratable type="radio" name="job_spec_questions_text_field_type" ng-value="false" ng-model='account.job_spec_questions_text_field_type' ng-change="updateJobSpecificationsFeatures()" ng-checked="!account.job_spec_questions_text_field_type" ng-disabled="!account.job_spec_questions_enabled" 
+                | Questions Text Field - not Ratable
+            /! If 'Questions' are enabled then AM can select either 'Questions Text Field - ratable'
+            .radio
+              label
+                input#ratable type="radio" name="job_spec_questions_text_field_type" ng-value="true" ng-model='account.job_spec_questions_text_field_type' ng-change="updateJobSpecificationsFeatures()" ng-checked="account.job_spec_questions_text_field_type" ng-disabled="!account.job_spec_questions_enabled" 
+                | Questions Text Field - Ratable
+
+            /! If 'Questions Text Field items - Ratable' is selected then AM can select one of the following rating types
+            .row
+            .col-md-6
+              p.text-center Rating Type:
+            .col-md-6
+              .radio
+                label
+                  input#thumbs-up type="radio" name="job_spec_questions_text_field_rating_type" value="thumbs-up" ng-model="account.job_spec_questions_text_field_rating_type" ng-change="updateJobSpecificationsFeatures()" ng-checked="account.job_spec_questions_text_field_rating_type == 'thumbs-up'" ng-disabled="!account.job_spec_questions_text_field_type" 
+                  | Thumbs Up
+              .radio
+                label
+                  input#thumbs-up-down type="radio" name="job_spec_questions_text_field_rating_type" value="thumbs-up-down" ng-model="account.job_spec_questions_text_field_rating_type" ng-change="updateJobSpecificationsFeatures()" ng-checked="account.job_spec_questions_text_field_rating_type == 'thumbs-up-down'" ng-disabled="!account.job_spec_questions_text_field_type" 
+                  | Thumbs Up/Down
+              .radio
+                label
+                  input#checkboxes type="radio" name="job_spec_questions_text_field_rating_type" value="checkboxes" ng-model="account.job_spec_questions_text_field_rating_type" ng-change="updateJobSpecificationsFeatures()" ng-checked="account.job_spec_questions_text_field_rating_type == 'checkboxes'" ng-disabled="!account.job_spec_questions_text_field_type" 
+                  | Checkboxes

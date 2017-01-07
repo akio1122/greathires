@@ -1,0 +1,47 @@
+div.edit_in_place
+  div.item-row ng-repeat="item in items" 
+    div ng-if="can_edit"
+      ul.list-unstyled
+        li.inline-block.guide-select ng-if="has_relation_with_interview_guide && can_edit"
+          span.interview-guide-select
+            select.form-control ng-change='assignInterviewGuide(item)' ng-model='item.interview_guide_id' ng-options='interview_guide.id as interview_guide.title for interview_guide in interview_guides'
+              option value='' Not Assigned
+        li.inline-block.inline-editor
+          .glyphicon.glyphicon-remove-circle ng-click="deleteItem($index, item.id)" ng-hide="itemUpdateBtnForm.$visible" 
+          span editable-text="item.description" e-form="itemUpdateBtnForm" onaftersave="updateItem($index, $data, item.id)" 
+            span ng-if="items_numbered" 
+              | {{$index + 1}}.
+            span ng-if="!items_numbered" 
+              | &bull;
+            | &nbsp;{{ item.description }}
+          .glyphicon.glyphicon-edit ng-click="itemUpdateBtnForm.$show()" ng-hide="itemUpdateBtnForm.$visible" 
+    div ng-if="!can_edit"
+      span ng-if="items_numbered" 
+        | {{$index + 1}}.
+      span ng-if="!items_numbered" 
+        | &bull;
+      | &nbsp;{{ item.description }}
+
+    div.margin-left ng-show="can_add_sub_items" 
+      div ng-repeat="sub_item in item.sub_items" 
+        div ng-if="can_edit"
+          .glyphicon.glyphicon-remove-circle ng-click="deleteSubItem($parent.$index, $index, $parent.item.id)" ng-hide="subitemUpdateBtnForm.$visible" 
+          span editable-text="sub_item" e-form="subitemUpdateBtnForm" onaftersave="updateSubItem($parent.$index, $index, $parent.item.id, $data)" 
+            | &bull;&nbsp;{{ sub_item }}
+          .glyphicon.glyphicon-edit ng-click="subitemUpdateBtnForm.$show()" ng-hide="subitemUpdateBtnForm.$visible" 
+        div ng-if="!can_edit"
+          | &bull;&nbsp;{{ sub_item }}
+
+      div ng-hide="!can_edit"
+        span editable-text="$parent.new_item" e-form="subitemCreateBtnForm" onaftersave="createSubItem($index ,item.id, $data)" 
+        button.btn.btn-xs ng-click="subitemCreateBtnForm.$show()" ng-hide="subitemCreateBtnForm.$visible" 
+          i.glyphicon.glyphicon-plus
+          | Add Sub-{{add_sub_label}}
+  
+  div.editable-buttons ng-hide="!can_edit"
+    span editable-text="new_item" e-form="itemCreateBtnForm" onaftersave="createItem($data)" 
+    button.btn ng-click="itemCreateBtnForm.$show()" ng-hide="itemCreateBtnForm.$visible" 
+      i.glyphicon.glyphicon-plus
+      | Add {{add_item_label}}
+    button.btn ng-click="showItemsTextArea()" ng-show="!show_items_textarea"
+      | Add Bulk {{add_item_label_plural}}

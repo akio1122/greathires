@@ -1,0 +1,24 @@
+#containerJobSetup.panel.panel-default
+  .panel-body
+    div ng-controller="JobSkillTraitCtrl" 
+      .row    
+        div.col-md-9
+          h4
+            | {{skill_name}}
+        div.col-md-3.text-right
+          button.btn.btn-danger ng-click="removeSkill()" ng-hide="!can_edit"
+            | Delete Job Skill
+      .well
+        div ng-show="account.job_skill_sub_traits_enabled"
+          input type="checkbox" name="job_skill_sub_traits_enabled" ng-click="enableSubTraits()" ng-model="account.job_skill_sub_traits_enabled" ng-checked="account.job_skill_sub_traits_enabled" 
+          span for="job_skill_sub_traits_enabled" 
+            | Add Sub-Traits
+        textarea_to_items
+        gh_edit_in_place
+
+    div.skill-questions-section ng-controller="JobSkillQuestionCtrl" ng-show="enable_question" 
+      h4.text-center Questions
+      .well
+        textarea_to_items
+        p ng-hide="items.isEmpty()" Assign to:
+        gh_edit_in_place.questions

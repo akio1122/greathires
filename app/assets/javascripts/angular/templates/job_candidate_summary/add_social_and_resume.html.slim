@@ -1,0 +1,73 @@
+.modal-header
+  h3.modal-title.text-center
+    | Manage Profiles and Attachments
+    i.glyphicon.glyphicon-remove.pull-right ng-click="closeModal()"
+.modal-body
+	
+	form name='socialForm' role="form" novalidate="true" ng-init="setFormScope(this)"
+		.form-inline.form-group
+		  button.btn.btn-default style="width:40px"
+		  	i.fa.fa-linkedin
+		  div style="display: inline" ng-show="isVisible('linkedin_public_profile_url')"
+			  input.form-control type="text" name="linkedin_public_profile_url" ng-model="candidate.linkedin_public_profile_url" 
+			  button.btn.btn-info ng-click="updateSocialFields(('linkedin_public_profile_url'))" Save
+		  
+		  div style="display: inline" ng-hide="isVisible('linkedin_public_profile_url')"
+			  span ng-bind="candidate.linkedin_public_profile_url"
+			  a ng-click="urlsOnEdit.linkedin_public_profile_url = true"
+			  	i.fa.fa-pencil
+			  a ng-click="clearUrl('linkedin_public_profile_url')"
+			  	i.fa.fa-times
+
+		.form-inline.form-group
+		  button.btn.btn-default style="width:40px"
+		  	i.fa.fa-twitter
+		  div style="display: inline" ng-show="isVisible('twitter_profile_url')"
+			  input.form-control type="text" name="twitter_profile_url" ng-model="candidate.twitter_profile_url" 
+			  button.btn.btn-info ng-click="updateSocialFields(('twitter_profile_url'))" Save
+		  
+		  div style="display: inline" ng-hide="isVisible('twitter_profile_url')"
+			  span ng-bind="candidate.twitter_profile_url"
+			  a ng-click="urlsOnEdit.twitter_profile_url = true"
+			  	i.fa.fa-pencil
+			  a ng-click="clearUrl('twitter_profile_url')"
+			  	i.fa.fa-times
+
+		.form-inline.form-group
+		  button.btn.btn-default style="width:40px"
+		  	i.fa.fa-facebook
+		  div style="display: inline" ng-show="isVisible('facebook_profile_url')"
+			  input.form-control type="text" name="facebook_profile_url" ng-model="candidate.facebook_profile_url" 
+			  button.btn.btn-info ng-click="updateSocialFields(('facebook_profile_url'))" Save
+		  
+		  div style="display: inline" ng-hide="isVisible('facebook_profile_url')"
+			  span ng-bind="candidate.facebook_profile_url"
+			  a ng-click="urlsOnEdit.facebook_profile_url = true"
+			  	i.fa.fa-pencil
+			  a ng-click="clearUrl('facebook_profile_url')"
+			  	i.fa.fa-times
+
+		.form-inline.form-group
+		  button.btn.btn-default style="width:40px"
+		  	i.fa.fa-github
+
+		  div style="display: inline" ng-show="isVisible('github_profile_url')"
+			  input.form-control type="text" name="github_profile_url" ng-model="candidate.github_profile_url" 
+			  button.btn.btn-info ng-click="updateSocialFields('github_profile_url')" Save
+		  
+		  div style="display: inline" ng-hide="isVisible('github_profile_url')"
+			  span ng-bind="candidate.github_profile_url"
+			  a ng-click="urlsOnEdit.github_profile_url = true"
+			  	i.fa.fa-pencil
+			  a ng-click="clearUrl('github_profile_url')"
+			  	i.fa.fa-times
+
+h3.modal-title.text-center
+  | Resume
+div.text-center direct-upload="" mediable_type="job_candidates" mediable_id="{{job_candidate.id}}" media_type="resume" button-legend="Add Resume" mime_types="pdf,doc,docx" account-id="current_account_id"
+div.text-center ng-show="job_candidate.candidate.resume"
+  a ng-href="{{job_candidate.candidate.resume.signed_url}}" target="_new" Resume
+  a.delete X
+
+
+

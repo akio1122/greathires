@@ -1,0 +1,81 @@
+.my-job
+  header.mj-header.hidden-xs
+    .row
+      .col-xs-12.col-sm-7.col-md-8
+        .heading
+          strong Interviews and Breaks
+      .col-xs-12.col-sm-5.col-md-4
+        p.text-right
+          a.btn.btn-primary.btn-lg ng-show="can_edit && !job_interviews.isEmpty()" ng-click="openJobInterviewModal()" Add New
+  .visible-xs.mj-header-xs
+    .dropdown.job-filter
+      a#jobsMenu.i-btn.dropdown-toggle data-toggle="dropdown" 
+        | Interviews and Breaks
+        i.fa.fa-sort-down
+    span.pull-right
+      a.btn.btn-primary ng-show="can_edit && !job_interviews.isEmpty()" ng-click="openJobInterviewModal()" Add New
+
+  .mj-body
+    div style="margin-top:100px" ng-show="job_interviews.isEmpty()"
+      p.text-center 
+        | There are no interviews(s) now.
+      p.text-center
+        a.btn.btn-primary ng-show="can_edit" ng-click="openJobInterviewModal()" Add New
+    div.table-responsive.visible-md.visible-lg
+      table.table.tbl-jobs.tbl-sort.gh-tbl-2 ng-init="predicate='interviewer.full_name'" ng-hide="job_interviews.isEmpty()"
+        thead.hidden-xs
+          tr
+            th ng-click="predicate='interviewer.full_name'"
+              span
+                | Interview Name
+                i.fa.fa-sort-desc ng-click="reverse=!reverse" ng-show="predicate=='interviewer.full_name' && reverse"
+                i.fa.fa-sort-up ng-click="reverse=!reverse" ng-show="predicate=='interviewer.full_name' && !reverse"
+                i.fa.fa-unsorted ng-show="predicate!='interviewer.full_name'"
+            th ng-click="predicate='scheduled_at'"
+              span
+                | Date
+                i.fa.fa-sort-desc ng-click="reverse=!reverse" ng-show="predicate=='scheduled_at' && reverse"
+                i.fa.fa-sort-up  ng-click="reverse=!reverse" ng-show="predicate=='scheduled_at' && !reverse"
+                i.fa.fa-unsorted ng-show="predicate!='scheduled_at'"
+            th
+              | Start time
+            th
+              | End time
+            th
+              | Location
+            th
+              | Round
+            th ng-if="!job_interview_guides.isEmpty()"
+              | Interview Guides
+            th Actions
+        tbody
+          tr ng-repeat="interview in job_interviews | orderBy:predicate:reverse"
+            td ng-if="interview.interview_type.id == null"
+              a.user-img
+                img ng-src="{{interview.interviewer.linkedin_profile.pictureUrl}}" width="54"
+                  span
+                    | {{interview.interviewer.full_name}}
+                    / TODO: Add span after the fullname with .gh-text-orange and text of: 'Invited but not Great Hires user yet' when this is the case
+            td ng-if="interview.interview_type.id != null"
+              | {{interview.interview_type.name}}
+            td
+              | {{interview.scheduled_at | date:'yyyy-MM-dd'}}
+            td
+              | {{interview.start_time | date:'shortTime'}}
+            td
+              | {{interview.end_time | date:'shortTime'}}
+            td
+              | {{interview.location}}
+            td
+              | {{interview.interview_round.name}}
+            td ng-if="!job_interview_guides.isEmpty()"
+              select.form-control ng-model="interview.interview_guide_id" ng-options="item.id as item.title for item in job_interview_guides" ng-model-options="{ updateOn: 'default' }" ng-change="editJobInterview(interview)" ng-if="interview.interview_type.id == null"
+                option value="" ng-hide="interview.interview_guide_id == null"
+                  | Select Guide
+            td.col-actions
+              p.tbl-actions
+                a.ttip.btn.btn-default data-placement="top" data-toggle="tooltip" title=("View/Edit Details") ng-if="view_candidate_result" ng-click="openJobInterviewModal(interview)"
+                  i.fa.fa-pencil
+                  span Edit
+                button.close.btn-del type="button" ng-click="deleteJobInterview(interview)"
+                  i.fa.fa-times

@@ -1,0 +1,46 @@
+#containerAccountSetup.panel.panel-default
+  h4.text-center Set up an Account
+  .panel-body
+    #accountSetUp.well
+      .account-set-up-form.form-horizontal role="form" 
+        .form-group
+          label.col-md-4.control-label for="company_name"  Company Name:
+          .col-md-4 ng-show="active_field == 'company_name'" ng-class="{'has-error': validation_errors.company_name}" 
+            input#company_name.form-control type="text" ng-model="account.company_name" ng-enter="updateAccount('company_name')" ng-esc="activeField()" ng-disabled='waiting' 
+            .pull-left.actions
+              button.btn.btn-xs.btn-default ng-click="updateAccount('company_name')" ng-disabled='waiting' 
+                i.glyphicon.glyphicon-ok
+              button.btn.btn-xs.btn-default ng-click="activeField()" ng-disabled='waiting' 
+                i.glyphicon.glyphicon-remove
+            p.help-block ng-show="validation_errors.company_name" {{validation_errors.company_name}}
+          .col-md-4 ng-show="active_field != 'company_name'" 
+            span
+              | {{account.company_name}}
+            .glyphicon.glyphicon-edit ng-click="activeField('company_name')" 
+          .col-md-4
+            span
+              | (e.g. Company Name)
+        .form-group
+          label.col-md-4.control-label for="email_domain"  Company Email Address Domain:
+          .col-md-4 ng-show="active_field == 'email_domain'" ng-class="{'has-error': validation_errors.email_domain}"
+            input#email_domain.form-control type="text" ng-model="account.email_domain" ng-enter="updateAccount('email_domain')" ng-esc="activeField()" ng-disabled='waiting'
+            .pull-left.actions
+              button.btn.btn-xs.btn-default ng-click="updateAccount('email_domain')" ng-disabled='waiting'
+                i.glyphicon.glyphicon-ok
+              button.btn.btn-xs.btn-default ng-click="activeField()" ng-disabled='waiting' 
+                i.glyphicon.glyphicon-remove
+            p.help-block ng-show="validation_errors.email_domain" {{validation_errors.email_domain}}
+          .col-md-4 ng-show="active_field != 'email_domain'"
+            span
+              | {{account.email_domain}}
+            .glyphicon.glyphicon-edit ng-click="activeField('email_domain')"
+          .col-md-4
+            span 
+              | (e.g. companyname.com)
+  h4.text-center Job Request
+  .panel-body
+    #accountSetUp.well
+      .checkbox
+        label
+          input type='checkbox' ng-model='account.job_request_enabled' ng-change='updateAccount()' 
+          | Make Job Request Available

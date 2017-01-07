@@ -1,0 +1,30 @@
+#containerAccountSetup.panel.panel-default
+  h4.text-center Candidate Priorities
+  .panel-body
+    .well
+      .row
+        .col-md-4 ng-repeat="priority_group in proirity_groups"
+          h5.text-center
+            | {{priority_group.titleize()}}
+          ul.list-unstyled.pull-left
+            li ng-repeat="proirity in account.proirities[priority_group]"
+              .glyphicon.glyphicon-remove-circle ng-click="deleteProirity(proirity, priority_group)" ng-hide="editProirityForm.$visible"
+              label
+                input type="checkbox" ng-model="proirity.active" ng-change='updateProirity(proirity)' ng-hide="editProirityForm.$visible"
+              label
+                span editable-text="proirity.name" e-form="editProirityForm" onbeforesave="validateProirity($data, priority_group)" onaftersave="updateProirity(proirity)"
+                  | {{proirity.name}}
+              .glyphicon.glyphicon-edit ng-click="editProirityForm.$show()" ng-hide="editProirityForm.$visible"
+
+          .pull-left
+            button.btn.btn-xs ng-click="newProirityForm.$show()" ng-hide="newProirityForm.$visible" 
+              i.glyphicon.glyphicon-plus
+            span editable-text="$parent.new_proirity" e-form="newProirityForm" onbeforesave="validateProirity($data, priority_group)" onaftersave="createProirity($data, priority_group)"
+            span ng-click="newProirityForm.$show()" ng-hide="newProirityForm.$visible"
+              | Click to add new {{priority_group.titleize()}}
+
+    .well
+      .checkbox
+        label
+          input type="checkbox" name="shared_comments_enabled" ng-model="account.shared_comments_enabled" ng-change="updateAccountPreferences()" ng-checked="account.shared_comments_enabled"
+          | Enabled Shared Comments

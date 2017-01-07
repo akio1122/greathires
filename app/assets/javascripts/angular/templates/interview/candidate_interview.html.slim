@@ -1,0 +1,93 @@
+section.tab-list
+  .cbox.hidden-xs
+    h3.ja-title Interview Guide
+    section.cbox
+      .panel-group.jaccordion
+        article.panel ng-repeat="skill in job.job_skills"
+          .panel-heading
+            h2.panel-title
+              a.collapsed.pointer data-toggle="collapse" data-target="#jobitv{{skill.id}}"
+                i.fa.fa-plus
+                i.fa.fa-minus
+                | {{skill.name}}
+          .panel-collapse.collapse id="jobitv{{skill.id}}"
+            .panel-body ng-hide="true"
+              p.collapse-inline
+                a.collapsed.note-link data-target="#addSkillNoteInline{{skill.id}}" data-toggle="collapse"
+                  i.fa.fa-plus-square
+                  | Note
+              .collapse.col-inline id="addSkillNoteInline{{skill.id}}"
+                form
+                  p
+                    textarea.form-control rows="1"
+                  .row.mb30
+                    span.col-xs-6
+                      button.btn.btn-block.btn-primary
+                        | Save Note
+                    span.col-xs-6
+                      button.btn.btn-block.btn-default.note-back data-target="#addSkillNoteInline{{skill.id}}" data-toggle="collapse"
+                        | Cancel
+            /! //Inline Note
+            ul.q-list.list-type-disc ng-if="!skill.job_skill_traits.isEmpty()"
+              li.q-item ng-repeat="trait in skill.job_skill_traits"
+                p
+                  | {{trait.description}}
+                  ul ng-if="account.job_skill_sub_traits_enabled && !trait.sub_items.isEmpty()"
+                    li ng-repeat="sub_trait in trait.sub_items"
+                      | {{sub_trait}}
+                .row ng-if="account.job_skill_traits_ratable"
+                  .col-xs-6.col-sm-8
+                    div ng-controller="InterviewRatingCtrl" ng-init="initCtrl(trait, trait_rating_options, 'job_skill_trait')"
+                      gh_rating
+
+            /! //Notes List
+            h3 Questions
+            ul.q-list ng-class="getListType(account.job_spec_questions_numbered)" ng-if="!skill.job_skill_questions.isEmpty()"
+              li.q-item ng-repeat="question in skill.job_skill_questions"
+                p 
+                  | {{question.description}}
+                .row
+                  .col-xs-6.col-sm-8
+                    div ng-controller="InterviewRatingCtrl" ng-init="initCtrl(question, question_rating_options, 'job_skill_question')" ng-if="account.job_skill_questions_ratable"
+                      gh_rating
+                  .col-xs-6.col-sm-4.text-right
+                    p.collapse-inline ng-if="account.job_skill_questions_comments_enabled"
+                      a.collapsed.note-link.pointer data-target="#addNoteInline{{question.id}}" data-toggle="collapse" 
+                        i.fa.fa-plus-square
+                        | Note
+                      span.txt-note
+                        | (visible to you)
+                .collapse.col-inline id="addNoteInline{{question.id}}"
+                  form
+                    p
+                      textarea.form-control rows="1" ng-model="note"
+                    .row.mb30
+                      span.col-xs-6
+                        button.btn.btn-block.btn-primary.note-back data-target="#addNoteInline{{question.id}}" data-toggle="collapse" ng-click="saveNote(question, note);note=''" Save Note
+                      span.col-xs-6
+                        button.btn.btn-block.btn-default.note-back data-target="#addNoteInline{{question.id}}" data-toggle="collapse" ng-click="note=''" Cancel
+                div.q-notes ng-if="account.job_skill_questions_comments_enabled"
+                  ol.n-list
+                    li.n-item ng-repeat="rating in question.ratings | filter: { rating_scale_option_id: null }"
+                      p.n-date
+                        span 
+                          | {{rating.created_at | date:'mediumDate'}}
+                        span 
+                          | {{rating.creator.full_name}}
+                      div.n-desc
+                        p
+                          | {{rating.comment}}
+            /! //Notes
+            p.collapse-inline
+              a.collapsed.note-link.pointer data-target="#addQuestionInline{{skill.id}}" data-toggle="collapse"
+                i.fa.fa-plus-square
+                | Add your question
+            .collapse.col-inline id="addQuestionInline{{skill.id}}"
+              form
+                p
+                  textarea.form-control rows="1" ng-model="new_question"
+                .row.mb30
+                  span.col-xs-6
+                    button.btn.btn-block.btn-primary.note-back data-target="#addQuestionInline{{skill.id}}" data-toggle="collapse" ng-click="saveQuestion(skill, new_question);new_question=''" Save Question
+                  span.col-xs-6
+                    button.btn.btn-block.btn-default.note-back data-target="#addQuestionInline{{skill.id}}" data-toggle="collapse" ng-click="new_question=''" Cancel

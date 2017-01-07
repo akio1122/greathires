@@ -1,0 +1,15 @@
+.my-job.gh-job
+  header.mj-header.hidden-xs
+    .row
+      / Had to shorten the job name column below to accommodate long button name.
+      .col-xs-12.col-sm-7.col-md-8
+        h5 Job: {{ resource.name }}
+      .col-xs-12.col-sm-4.col-md-3
+        p ng-hide="!can_edit"
+          a.btn.btn-large.btn-primary href="#"  ng-click="openSaveJobTemplateModal()" data-toggle="tooltip" data-placement="bottom" title="This will save this job to be re-used as a template for new jobs" Save as a Job Template
+
+  .visible-xs.mj-header-xs
+    span.pull-right ng-hide="!can_edit"
+      a.btn.btn-primary href="#" ng-click="openSaveJobTemplateModal()" Save as a Job Template
+
+  .mj-body ui-view=""

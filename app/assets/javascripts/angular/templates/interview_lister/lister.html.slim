@@ -1,0 +1,38 @@
+.gh-filter-top.gh-fbtm.hidden-xs
+  .dropdown
+    a#filterMenu.gh-ibtn.dropdown-toggle data-toggle="dropdown" href="#"
+      | Filter By
+      i.fa.fa-sort-down
+    -# The LIs below are filters that should trigger an XHR API call to get new data via API and refresh the content in ul.media-list section below
+    ul.dropdown-menu aria-labelledby="filterMenu" role="menu"
+      li.dropdown-header Filter by
+      li
+        a href="#" tabindex="-1"  Specific Job Title
+      li
+        a href="#" tabindex="-1"  Specific Job Title
+      li
+        a href="#" tabindex="-1"  Specific Job Title
+      li
+        a href="#" tabindex="-1"  Another Filter
+
+ul.media-list.gh-list
+  li.media ng-repeat="interview in interviews"
+    p.gh-meta ng-if="interview.interviewer_id==current_user.id && interview.type=='today'"
+      | {{interview.start_time  | date:'shortTime'}} to {{interview.end_time | date:'shortTime'}}, {{interview.location}}
+    p.gh-meta ng-if="interview.interviewer_id==current_user.id && interview.type!='today'"
+      | {{interview.scheduled_at  | date:'dd MMM '}} {{interview.start_time  | date:'shortTime'}} to {{interview.end_time | date:'shortTime'}}, {{interview.location}}
+    p.gh-meta ng-if="interview.interviewer_id!=current_user.id"
+      | Candidate Interviewing
+    a.gh-link href="interviews/{{interview.job_interview_id}}"
+      span.pull-left
+        img.media-object alt="" ng-src="{{interview.picture_url}}" width="80"
+      .media-body
+        h4.media-heading 
+          | {{interview.candidate_name}}
+        p 
+          | {{interview.job_title}}
+        p 
+          | {{interview.interview_round}}
+      i.fa.fa-angle-right
+h5.text-center ng-show="interviews.isEmpty()"
+  | You have no {{interviews_label}}

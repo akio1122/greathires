@@ -1,0 +1,11 @@
+p.q-rate
+  label ng-repeat="option in rating_options"
+    span ng-if="option.name=='thumbs_up'"
+      input.ird type="checkbox" name="{{rating_name}}" ng-checked="rating.rating==option.rating"
+      i.fa.fa-thumbs-up ng-click="rating_click(option.id, option.rating)"
+    span ng-if="option.name=='thumbs_down'"
+      input.ird type="checkbox" name="{{rating_name}}" ng-checked="rating.rating==option.rating"
+      i.fa.fa-thumbs-down ng-click="rating_click(option.id, option.rating)"
+    span ng-if="option.name=='up'"
+      input.ird type="checkbox" name="{{rname}}" ng-checked="rating.rating==option.rating"
+      i.fa.fa-check ng-click="rating_click(option.id, option.rating)"

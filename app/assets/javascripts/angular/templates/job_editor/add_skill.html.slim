@@ -1,0 +1,34 @@
+.modal-header
+  h3.modal-title 
+    | Select job skills
+    i.glyphicon.glyphicon-remove-circle.pull-right ng-click="closeModal(true)"
+
+.modal-body
+  ul.list-inline ng-hide="range.length < 20"
+    li
+      a href="#" ng-click="filterSkills(-1, $event)" View all
+    li ng-repeat="n in range"
+      a href="#" ng-click="filterSkills(n, $event)" {{n}}
+
+  .container
+    ul.list-unstyled
+      li ng-repeat="item in avail_skills | skillFilter:filter | orderBy:'name'"
+        input type="checkbox" value="{{item.name}}" ng-model="item.checked"
+        | &nbsp;{{ item.name }}  
+
+  form name="skillForm" show-validation="true" ng-init="setFormScope(this)"
+    div
+      label Add new job skill
+      .row    
+        div.form-horizontal.col-md-12
+          div.form-group
+            div.col-sm-9
+              input type="text" id="new_skill" name="name" ng-model="$parent.new_skill" class="form-control" placeholder="Name the skill"
+            button type="button" class="btn btn-primary" ng-click="addSkill()" Add
+          span.help-block ng-show="form.skillForm.name.$invalid" 
+            ul
+              li ng-repeat="msg in validation_errors.name" {{ msg }}
+
+.modal-footer.text-left
+  button.btn.btn-primary ng-click="closeModal(false)"
+    | Done

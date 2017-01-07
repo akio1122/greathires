@@ -1,0 +1,38 @@
+#containerInvitations.panel.panel-default
+  .panel-body
+    h3.text-center Invite Users
+    p This section allows Account Managers to invite users to the account so that they can access the app. The Account Manger can grant permission to these users to add jobs.
+
+    .alert ng-repeat="alert in alerts" type='{{alert.type}}' close="closeAlert($index)" 
+      | {{alert.msg}}
+
+    br
+    .text-center
+      a.btn.btn-primary.center ng-click="openInvitationModal()" 
+        span.glyphicon.glyphicon-plus
+        | Add individual to invitation list
+    br
+    .clearfix style="min-height:100px" 
+      table.table.no-border ng-if="invitations.length > 0" 
+        thead
+          tr
+            th
+            th Name
+            th Email
+            th.field-cell User Role
+        tr ng-repeat="invitee in invitations" 
+          td
+            .glyphicon.glyphicon-remove-circle ng-click="deleteItem($index, invitee.id)" 
+            .glyphicon.glyphicon-edit ng-click="openInvitationModal($index)" 
+
+          td
+            | {{invitee.first}} {{invitee.last}}
+          td
+            | {{invitee.email}}
+          td.field-cell
+            select.form-control.input-sm ng-model="invitee.role_id" ng-change="update(invitee, onSuccess)" ng-options="role.id as role.name for role in user_roles" 
+    br
+
+    .text-center
+      a.btn.btn-primary.center ng-click="inviteUsers()" ng-disabled="invitations.length == 0" 
+        | Invite Users

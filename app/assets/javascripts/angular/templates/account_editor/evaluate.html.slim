@@ -1,0 +1,63 @@
+#containerEvaluate.panel.panel-default
+  h4.text-center Evaluate
+  .panel-body
+    p Overall Evaluation:
+    .well
+      form class="form-horizontal" role="form"
+        .form-group
+          label.col-md-4 for='overall_questions_title'
+           | Overall Question:
+          .col-md-8
+            input#job_skills_label.form-control name='overall_questions_title' type='text' ng-model="account.overall_questions_title" ng-blur="updateAccountPreferences()"
+
+      #overallEvaluation
+        form class="form-horizontal" role="form" ng-repeat="scale in account.overall"
+          .form-group
+            .checkbox.col-md-2
+              label
+                input type="checkbox" ng-model="scale.active" ng-change='updateRatingScaleOption(scale)' ng-disabled="$index != 0 && !account.overall[$index-1].active"
+                | {{scale.rating||0}}
+            label.col-md-2.control-label for="name_{{scale.id}}" ng-class="{ 'disabled' : !scale.active }"
+              | Label
+            .col-md-8
+              input.form-control id="name_{{scale.id}}" name='name' type='text' ng-model="scale.name" ng-disabled="!scale.active" ng-blur="updateRatingScaleOption(scale)"
+
+      form class="form-horizontal" role="form"
+        .form-group
+          .checkbox.col-md-6
+            label
+              input name='preferred_candidate_enabled' type='checkbox' ng-model="account.preferred_candidate_enabled" ng-change="updateAccountPreferences()"
+              | Enable Preferred Candidate feature?
+          label.control-label.col-md-2 for='preferred_candidate_label'
+            | Label
+          .col-md-4
+            input.form-control#preferred_candidate_label ng-disabled="!account.preferred_candidate_enabled" name='preferred_candidate_label' type='text' ng-model="account.preferred_candidate_label" ng-blur="updateAccountPreferences()"
+        .form-group
+          .checkbox.col-md-6
+            label
+              input name='overall_comments_enabled' type='checkbox' ng-model="account.overall_comments_enabled" ng-change="updateAccountPreferences()"
+              | Enable Overall Evaluate comments?
+          label.control-label.col-md-2 for='overall_comments_label'
+            | Label
+          .col-md-4
+            input.form-control#overall_comments_label ng-disabled="!account.overall_comments_enabled" name='overall_comments_label' type='text' ng-model="account.overall_comments_label" ng-blur="updateAccountPreferences()"
+
+  .panel-body
+    p Job Skills Ratings:
+    .well
+      #jobSkillsRatings
+        form class="form-horizontal" role="form" ng-repeat="scale in account.job_skills_ratings"
+          .form-group
+            .checkbox.col-md-2
+              label
+                input type="checkbox" ng-model="scale.active" ng-change='updateRatingScaleOption(scale)' ng-disabled="$index != 0 && !account.job_skills_ratings[$index-1].active"
+                | {{scale.rating||0}}
+            label.col-md-2.control-label for="name_{{scale.id}}" ng-class="{ 'disabled' : !scale.active }"
+              | Label
+            .col-md-8
+              input.form-control id="name_{{scale.id}}" name='name' type='text' ng-model="scale.name" ng-disabled="!scale.active" ng-blur="updateRatingScaleOption(scale)"
+
+      .checkbox
+        label
+          input name='job_skils_comments_enabled' type='checkbox' ng-model="account.job_skils_comments_enabled" ng-change="updateAccountPreferences()"
+          | Enable Job Skills comments

@@ -1,0 +1,38 @@
+#containerInteviewSchedule.panel.panel-default
+  .panel-body
+    h4 Interview Rounds
+    .well.col-md-12
+      ul.list-unstyled
+        li ng-repeat="interview_round in account.interview_rounds"
+          .glyphicon.glyphicon-remove-circle ng-click="deleteInterviewRound(interview_round)" ng-hide="interviewRoundUpdateBtn.$visible"
+          label
+            input type="checkbox" ng-model="interview_round.active" ng-change='updateInterviewRound(interview_round)' ng-hide="interviewRoundUpdateBtn.$visible"
+          label
+            span editable-text="interview_round.name" e-form="interviewRoundUpdateBtn" onbeforesave="validateInterviewRound($data)" onaftersave="updateInterviewRound(interview_round)"
+              | {{interview_round.name}}
+          .glyphicon.glyphicon-edit ng-click="interviewRoundUpdateBtn.$show()" ng-hide="interviewRoundUpdateBtn.$visible"
+
+      button.btn.btn-xs ng-click="roundCreateBtnForm.$show()" ng-hide="roundCreateBtnForm.$visible" 
+        i.glyphicon.glyphicon-plus
+      span editable-text="new_round" e-form="roundCreateBtnForm" onbeforesave="validateInterviewRound($data)" onaftersave="createInterviewRound($data)"
+      span ng-click="roundCreateBtnForm.$show()" ng-hide="roundCreateBtnForm.$visible"
+        | Add Another Interview Round
+
+  .panel-body
+    h4 Interview Type Options
+    .well.col-md-12
+      ul.list-unstyled
+        li ng-repeat="interview_type in account.interview_types"
+          .glyphicon.glyphicon-remove-circle ng-click="deleteInterviewType(interview_type)" ng-hide="interviewTypeUpdateBtn.$visible"
+          label
+            input type="checkbox" ng-model="interview_type.active" ng-change='updateInterviewType(interview_type)' ng-hide="interviewTypeUpdateBtn.$visible"
+          label
+            span editable-text="interview_type.name" e-form="interviewTypeUpdateBtn" onbeforesave="validateInterviewType($data)" onaftersave="updateInterviewType(interview_type)"
+              | {{interview_type.name}}
+          .glyphicon.glyphicon-edit ng-click="interviewTypeUpdateBtn.$show()" ng-hide="interviewTypeUpdateBtn.$visible"
+
+      button.btn.btn-xs ng-click="typeCreateBtnForm.$show()" ng-hide="typeCreateBtnForm.$visible" 
+        i.glyphicon.glyphicon-plus
+      span editable-text="new_type" e-form="typeCreateBtnForm" onbeforesave="validateInterviewType($data)" onaftersave="createInterviewType($data)"
+      span ng-click="typeCreateBtnForm.$show()" ng-hide="typeCreateBtnForm.$visible"
+        | Add Another Interview Type

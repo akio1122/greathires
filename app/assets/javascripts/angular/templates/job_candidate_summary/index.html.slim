@@ -1,0 +1,97 @@
+.my-job
+  header.mj-header.hidden-xs
+    .row
+      .col-xs-12.col-sm-7.col-md-8
+        .heading
+          strong Candidate
+          small Job Status
+          select.form-control ng-model="resource.status_id" ng-options="item.id as item.name for item in job_statuses" ng-model-options="{ updateOn: 'default' }" ng-change="update(resource)" ng-show="can_edit" 
+      .col-xs-12.col-sm-5.col-md-4
+        p.text-right
+          a.btn.btn-primary.btn-lg href="#" ng-show="can_edit" ng-click="openCandidateModal()" Add Candidate
+  .visible-xs.mj-header-xs
+    .dropdown.job-filter
+      a#jobsMenu.i-btn.dropdown-toggle data-toggle="dropdown" href="#" 
+        | Candidates
+        i.fa.fa-sort-down
+      ul.dropdown-menu aria-labelledby="jobsMenu" role="menu" 
+        li.dropdown-header Filter...
+        li.active
+          a href="#" tabindex="-1"  Interviewing
+        li
+          a href="#" tabindex="-1"  Other status
+        li
+          a href="#" tabindex="-1"  Other status
+        li.dropdown-header Sort...
+        li.active
+          a href="#" tabindex="-1"  By Name
+        li
+          a href="#" tabindex="-1"  By Date
+    span.pull-right
+      a.btn.btn-primary href="#" ng-show="can_edit" ng-click="openCandidateModal()" Add Candidate
+
+  .mj-body
+    h5.text-center ng-show="candidates.length == 0" There are no candidate(s) now.
+    table.table.tbl-jobs.tbl-sort ng-init="predicate=''" ng-if="candidates.length > 0"
+      thead.hidden-xs
+        tr
+          th
+            | Candidate
+            i.fa.fa-sort-down ng-click="predicate='candidate.last'"
+            i.fa.fa-sort-up ng-click="predicate='candidate.last'"
+          th ng-if="!can_edit"
+            | Last Interview
+          th
+            | Candidate Status
+            i.fa.fa-sort-down ng-click="predicate='candidate_status_id'"
+            i.fa.fa-sort-up ng-click="predicate='candidate_status_id'"
+          th
+            | Interview State
+            i.fa.fa-sort-down ng-click="predicate='interview_status_id'"
+            i.fa.fa-sort-up ng-click="predicate='interview_status_id'"
+          th Actions
+      tbody
+        tr ng-repeat="candidate in candidates | orderBy:predicate:reverse" 
+          td
+            a.user-img href="#" 
+              img ng-src="{{candidate.candidate.linkedin_picture_url}}" width="54"
+                span 
+                  | {{candidate.candidate.full_name}}
+            span.visible-xs 
+              | {{candidate.interview_status.name}} 
+
+          td.hidden-xs ng-if="!can_edit"
+            | {{candidate.last_interview}}
+
+          td.hidden-xs
+            select.form-control ng-model="candidate.candidate_status_id" ng-options="item.id as item.name for item in current_account.candidate_statuses" ng-model-options="{ updateOn: 'default' }" ng-change="updateCandidate(candidate, $event)" ng-show="can_edit" 
+              option value="" ng-hide="candidate.candidate_status_id > 0"
+                | selected
+            span ng-show="!can_edit" ng-bind="candidate.candidate_status.name"
+          td.hidden-xs
+            select.form-control ng-model="candidate.interview_status_id" ng-options="item.id as item.name for item in current_account.interview_statuses" ng-model-options="{ updateOn: 'default' }" ng-change="updateCandidate(candidate)" ng-show="can_edit" 
+              option value="" ng-hide="candidate.interview_status_id > 0"
+                | selected
+            span ng-show="!can_edit" ng-bind="candidate.interview_status.name"
+
+          td.col-actions.mw200 ng-if="can_edit"
+            p.tbl-actions
+              a.ttip.btn.btn-default data-placement="top" data-toggle="tooltip" title=("View/Edit Details") ng-click="openCandidateModal(candidate.candidate)"
+                i.fa.fa-pencil
+                span Details
+              a.ttip.btn.btn-default data-placement="top" data-toggle="tooltip" title=("View Interviews") ui-sref="interviews({id: candidate.id})"
+                i.fa.fa-calendar
+                span Interviews
+              a.ttip.btn.btn-default data-placement="top" data-toggle="tooltip" href="#" title=("View Candidate Results") ng-if="view_candidate_result" 
+                i.fa.fa-bar-chart-o
+                span Candidate Results
+              button.close.btn-del type="button" ng-click="deleteCandidate(candidate)"
+                i.fa.fa-times
+          td.col-actions ng-if="!can_edit"
+            p.tbl-actions
+              a.ttip.btn.btn-default data-placement="top" data-toggle="tooltip" href="#" title=("View Interviews") 
+                i.fa.fa-calendar
+                span Interviews
+
+    div.alert.alert-success ng-show="no_interviews" 
+      | You have no candidate interviews scheduled

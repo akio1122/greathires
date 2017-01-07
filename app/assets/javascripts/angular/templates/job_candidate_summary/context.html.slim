@@ -1,0 +1,22 @@
+section#jobEditor.sn-box
+  header.c-profile
+    p.hidden-xs.back-nav
+      a.back-to href="../../jobs"
+        i.fa.fa-angle-left
+        | My Jobs
+    ul.media-list
+      li.media.info-box
+        .media-body
+          .cp-top
+            h4
+              | {{resource.name}}
+            p Job Req# : {{ resource.requisition_ref }}
+            p Hiring Manager : {{hiringManager()}}
+            p Created At : {{resource.created_at | date: 'MMM d, yyyy'}}
+          ul.nav.nav-pills
+            li
+              a href="edit" class="ttip" data-toggle="tooltip" data-placement="top" title="View/Edit Job Details"
+                i.fa.fa-gear
+            li
+              a href="#" class="ttip" data-toggle="tooltip" data-placement="top" title="View Job Results"
+                i.fa.fa-bar-chart-o

@@ -1,0 +1,36 @@
+#containerAccountSetup.panel.panel-default
+  .panel-body
+    h4 Profile & Connections:
+    .well
+      .checkbox
+        label
+          input type='checkbox' ng-model='account.display_linked_in' ng-change='updateAccount()'
+          | Display LinkedIn connections
+      .checkbox
+        label
+          input type='checkbox' ng-model='account.interviewer_notes_enabled' ng-change='updateAccount()'
+          | Allow Interviewer notes (not shared)
+
+  .panel-body
+    h4 Candidate Social Accounts that can be associated with the Candidate Profile
+    .well
+      .checkbox
+        label
+          input type='checkbox' ng-model='account.facebook_association_enabled' ng-change='updateAccount()' 
+          | Twitter
+      .checkbox
+        label
+          input type='checkbox' ng-model='account.twitter_association_enabled' ng-change='updateAccount()' 
+          | Facebook
+      .checkbox
+        label
+          input type='checkbox' ng-model='account.github_association_enabled' ng-change='updateAccount()' 
+          | GitHub
+
+  .panel-body
+    h4 Candidate work product or screening test attachments:
+    .well
+      .checkbox
+        label
+          input type='checkbox' ng-model='account.attachnents_enabled' ng-change='updateAccount()'
+          | Enable Attachments

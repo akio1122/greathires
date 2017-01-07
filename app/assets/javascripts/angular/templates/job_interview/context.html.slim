@@ -1,0 +1,69 @@
+
+header.c-profile
+  p.hidden-xs.back-nav
+    a.back-to href="#"
+      i.fa.fa-angle-left
+      | Candidates
+  ul.media-list.info-box
+    li.media
+      .media-body
+        .cp-top
+          h4.media-heading
+            | {{resource.name}}
+      hr
+      span.pull-left.c-img
+        img.media-object alt="" ng-src="{{getImageUrl(job_candidate.candidate.linkedin_picture_url)}}" width="80"
+      .media-body
+        .cp-top
+          h4.media-heading
+            | {{job_candidate.candidate.first}} {{job_candidate.candidate.last}}
+
+          div ng-hide="job_candidate.linkedin_profile == null" 
+            p Location - {{job_candidate.linkedin_profile.location.name}}
+            p Current Title - {{job_candidate.linkedin_profile.headline}}
+            p ng-hide="previous_positions == ''" Previous Title - {{previous_positions}}
+            
+          h5 ng-click="openCandidateModal(job_candidate)"
+            i.fa.fa-pencil
+            | &nbsp;Change candidate
+        hr
+        .cp-top
+          h4.media-heading Social and attachments
+          ul.nav.nav-pills
+            li
+              a.ttip data-toggle="tooltip" data-placement="top" title="Linkedin"
+                i.fa.fa-linkedin
+            li
+              a.ttip data-toggle="tooltip" data-placement="top" title="Linkedin"
+                i.fa.fa-facebook
+            li
+              a.ttip data-toggle="tooltip" data-placement="top" title="Linkedin"
+                i.fa.fa-twitter
+          div.text-center ng-show="job_candidate.candidate.resume"
+            a ng-href="{{job_candidate.candidate.resume.signed_url}}" target="_new" Resume
+            a.delete X
+          h5 ng-click="openSocialAndAttachmentModal()"
+            i.fa.fa-pencil
+            | &nbsp;Manage profiles and attachments
+
+        hr
+        .cp-top
+          h4.media-heading Hiring Manager Notes
+          ul.n-list
+            li.n-item ng-repeat="note in job_candidate.notes"
+              p.n-date
+                span ng-bind="note.created_at | date: 'MMM d, yyyy'"
+              p.n-date
+                span ng-bind="note.user_name"
+              .n-desc
+                | {{note.text}}
+
+          div ng-hide="hiring_manager_note == null"
+            .form-group
+              textarea.form-control type="text" ng-model="hiring_manager_note"
+
+            a.btn.btn-info ng-click="saveHiringManagerNote()" Save Note
+            a.btn.btn-default.pull-right ng-click="hiring_manager_note=null" Cancel
+          p ng-click="hiring_manager_note = ''" ng-hide="hiring_manager_note != null"
+            i.fa.fa-plus-square
+            | Add Note

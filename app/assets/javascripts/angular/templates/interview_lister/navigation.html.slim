@@ -1,0 +1,14 @@
+ul
+  li.active
+    a href="interviews" Interviews
+    ul#tab-list.nav.nav-tabs.hidden-xs
+      li ui-sref-active="active"
+        a ui-sref="app.today" Today({{today.length}})
+      li ui-sref-active="active"
+        a ui-sref="app.upcoming" Upcoming({{upcoming.length}})
+      li ui-sref-active="active"
+        a ui-sref="app.past" Past({{past.length}})
+  li
+    a href="jobs" My Jobs
+  li
+    a.my-account-link href="edit" My Account

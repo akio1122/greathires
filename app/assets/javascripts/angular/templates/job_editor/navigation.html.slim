@@ -1,0 +1,18 @@
+nav.left-nav
+  #navAccount.hidden-xs
+    .list-group
+      a.list-group-item ui-sref-active="active" ui-sref="app.setup"
+        | Setup
+      a.list-group-item ui-sref-active="active" ui-sref="app.hiring_teams"
+        | Hiring Team
+      a.list-group-item ng-repeat="item in resource.specifications" ui-sref-active="active" ui-sref="app.specification({id: item.id})" ng-if="item.specification.active"
+        | {{item.name}}
+      a.list-group-item href="#" ng-click="openSkillsModal($event)" ng-show="can_edit"
+        | {{job_skills_label()}}
+        ul.list-inline.pull-right
+          li
+            i.fa.fa-plus-square
+      a.list-group-item ng-if="account.personalized_interview_guides_enabled" ui-sref-active="active" ui-sref="app.interview_guides" ng-show="can_edit"
+        | Interview Guides
+      a.list-group-item ng-repeat="item in resource.job_skills" ui-sref-active="active" ui-sref="app.skill({id: item.id})"
+        | {{item.name}}

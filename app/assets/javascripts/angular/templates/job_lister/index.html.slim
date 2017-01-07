@@ -1,0 +1,69 @@
+.my-job
+  .visible-xs.oj-alert
+    .alert.fade.in
+      button.close aria-hidden="true" data-dismiss="alert" type="button"  ×
+      em This is a list of your open jobs. From here you can start a job, view job's details or review condidates and schedule interviews.
+  header.mj-header.hidden-xs
+    .row
+      .col-xs-12.col-sm-8.col-md-9
+        ul.breadcrumb
+          li.active
+            a href="#"  Open Jobs
+          li
+            a href="#"  Closed
+          li
+            a href="#"  Templates
+      .col-xs-12.col-sm-4.col-md-3
+        p.text-right
+          a.btn.btn-primary.btn-lg href="#" ng-click="openAddJobModal()" Add Job
+  .visible-xs.mj-header-xs
+    .dropdown.job-filter
+      a#jobsMenu.i-btn.dropdown-toggle data-toggle="dropdown" href="#" 
+        | Open Jobs
+        i.fa.fa-sort-down
+      ul.dropdown-menu aria-labelledby="jobsMenu" role="menu" 
+        li.dropdown-header Filter...
+        li.active
+          a href="#" tabindex="-1"  Open Jobs
+        li
+          a href="#" tabindex="-1"  Closed Jobs
+        li
+          a href="#" tabindex="-1"  Templates
+    span.pull-right
+      a.txt-link href="#"  Submit Job Request
+      a.btn.btn-primary href="#" ng-click="openAddJobModal()" Add Job
+
+  .mj-body
+    p.text-right.hidden-xs
+      a.txt-link href="#" 
+        small Submit Job Request
+    table.table.tbl-jobs.tbl-sort
+      thead.hidden-xs
+        tr
+          th
+            | Job Title
+            i.fa.fa-sort-down
+            i.fa.fa-sort-up
+          th
+            | Job Status
+            i.fa.fa-sort-down
+            i.fa.fa-sort-up
+          th Actions
+      tbody
+        tr ng-repeat="job in resources"
+          td
+            | {{job.name}}
+          td
+            select.form-control.hidden-xs ng-model="job.status_id" ng-options="item.id as item.name for item in job_statuses" ng-model-options="{ updateOn: 'default' }" ng-change="update(job, $event)"
+            p.visible-xs nameg-bind="job.status.name"
+          td.col-actions.mw165
+            p.tbl-actions
+              a.ttip.btn.btn-default data-placement="top" data-toggle="tooltip" href="jobs/{{job.id}}/edit" title=("View/Edit Job Details") 
+                i.fa.fa-gear
+                span Job Details
+              a.ttip.btn.btn-default data-placement="top" data-toggle="tooltip" href="jobs/{{job.id}}/candidate_summary" title=("View Candidates") 
+                i.fa.fa-file-text-o
+                span Candidates
+              a.ttip.btn.btn-default data-placement="top" data-toggle="tooltip" href="#" title=("View Job Results") 
+                i.fa.fa-bar-chart-o
+                span Job Results

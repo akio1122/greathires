@@ -1,0 +1,118 @@
+#containerAccountSetup.panel.panel-default
+  h4.text-center Job Skills
+  .panel-body
+    p Interview Guide
+    #interviewGuide.well
+      .checkbox
+        label
+          input type="checkbox" name="personalized_interview_guides_enabled" ng-model="account.personalized_interview_guides_enabled" ng-change="updateAccountPreferences()" ng-checked="account.personalized_interview_guides_enabled"
+          | Make Interview Guides Available
+  .panel-body
+    p Manage Job Skills
+    #manageJobSkills.well
+      p Here is where the Job Skills that will be displayed to users are added and published. User added Job Skills must be approved and will not published by default. If a user adds their own new Job Skill it will be added to this list - you must manually publish these new Job Skills for them to be visible for selection in a new job.
+      .form-horizontal.col-md-12
+        .form-group
+          label.control-label.pull-left for='job_skills_label'
+            | Label
+          .col-md-8
+            input#job_skills_label.form-control name='job_skills_label' type='text' ng-model="account.job_skills_label" ng-blur="updateAccountPreferences()"
+      ul.list-unstyled.skills.row
+        li.col-md-6 ng-repeat="skill in account.skills"
+          .glyphicon.glyphicon-remove-circle ng-click="deleteSkill(skill)" ng-hide="editSkillForm.$visible"
+          label
+            input type="checkbox" ng-model="skill.active" ng-change='updateSkill(skill)' ng-hide="editSkillForm.$visible"
+          label
+            span editable-text="skill.name" e-form="editSkillForm" onbeforesave="validateSkill($data)" onaftersave="updateSkill(skill)"
+              | {{skill.name}}
+          .glyphicon.glyphicon-edit ng-click="editSkillForm.$show()" ng-hide="editSkillForm.$visible"
+
+      button.btn.btn-xs ng-click="newSkillForm.$show()" ng-hide="newSkillForm.$visible" 
+        i.glyphicon.glyphicon-plus
+      span editable-text="new_skill" e-form="newSkillForm" onbeforesave="validateSkill($data)" onaftersave="createSkill($data)"
+      span ng-click="newSkillForm.$show()" ng-hide="newSkillForm.$visible"
+        | Click to add new Job Skill
+
+  .panel-body
+    p Manage Job Skills Features
+    #manageJobSkillsFeatures.well
+      .row
+        .col-md-6
+          p Traits
+          .radio
+            label
+              input#not-ratable type="radio" name="job_skill_traits_ratable" ng-value="false" ng-model='account.job_skill_traits_ratable' ng-change="updateJobSkillsFeatures()" ng-checked="!account.job_skill_traits_ratable" 
+              | Large Text Field
+          .radio
+            label
+              input#ratable type="radio" name="job_skill_traits_ratable" ng-value="true" ng-model='account.job_skill_traits_ratable' ng-change="updateJobSkillsFeatures()" ng-checked="account.job_skill_traits_ratable" 
+              | Large Text Field items can be Ratable
+
+          /! If 'Large Text Field items can be Ratable' is selected then AM can select one of the following rating types
+          .row
+            .col-md-6
+              p.text-center Traits Rating Types:
+            .col-md-6
+              .radio
+                label
+                  input#thumbs-up type="radio" name="job_skill_traits_rating_type" value="thumbs-up" ng-model="account.job_skill_traits_rating_type" ng-change="updateJobSkillsFeatures()" ng-checked="account.job_skill_traits_rating_type == 'thumbs-up'" ng-disabled="!account.job_skill_traits_ratable" 
+                  | Thumbs Up
+              .radio
+                label
+                  input#thumbs-up-down type="radio" name="job_skill_traits_rating_type" value="thumbs-up-down" ng-model="account.job_skill_traits_rating_type" ng-change="updateJobSkillsFeatures()" ng-checked="account.job_skill_traits_rating_type == 'thumbs-up-down'" ng-disabled="!account.job_skill_traits_ratable" 
+                  | Thumbs Up/Down
+              .radio
+                label
+                  input#checkboxes type="radio" name="job_skill_traits_rating_type" value="checkboxes" ng-model="account.job_skill_traits_rating_type" ng-change="updateJobSkillsFeatures()" ng-checked="account.job_skill_traits_rating_type == 'checkboxes'" ng-disabled="!account.job_skill_traits_ratable" 
+                  | Checkbox
+          .checkbox
+            label
+              input#allows_sub_traits type="checkbox" name="job_skill_sub_traits_enabled" ng-change="updateJobSkillsFeatures()" ng-checked="account.job_skill_sub_traits_enabled" ng-model='account.job_skill_sub_traits_enabled' 
+              | Traits can have Sub-Traits
+
+        .col-md-6
+          p Questions
+          .checkbox
+            label
+              input#questions type="checkbox" name="job_skill_questions_enabled" ng-change="updateJobSkillsFeatures()" ng-checked="account.job_skill_questions_enabled" ng-model="account.job_skill_questions_enabled" 
+              | Enable Questions
+          - isQuestionsDisabled = !@job_skill_questions_enabled
+          .col-md-offset-1
+            /! If 'Questions' are enabled then AM can enable 'Questions are numbered'
+            .checkbox
+              label
+                input#questions type="checkbox" name="job_skill_questions_numbered" ng-value="checkboxes" ng-model="account.job_skill_questions_numbered" ng-change="updateJobSkillsFeatures()" ng-checked="account.job_skill_questions_numbered && account.job_skill_questions_enabled" ng-disabled="!account.job_skill_questions_enabled" 
+                | Questions are numbered
+            /! If 'Questions' are enabled then AM can enable 'Allow comments for individual questions'
+            .checkbox
+              label
+                input#questions type="checkbox" name="job_skill_questions_comments_enabled" ng-value="checkboxes" ng-model="account.job_skill_questions_comments_enabled" ng-change="updateJobSkillsFeatures()" ng-checked="account.job_skill_questions_comments_enabled && account.job_skill_questions_enabled" ng-disabled="!account.job_skill_questions_enabled" 
+                | Allow Comments for individual questions
+            /! If 'Questions' are enabled then AM can select either 'Questions Text Field - not ratable'' (default selection)
+            .radio
+              label
+                input#not-ratable type="radio" name="job_skill_questions_ratable" ng-value="false" ng-model='account.job_skill_questions_ratable' ng-change="updateJobSkillsFeatures()" ng-checked="!account.job_skill_questions_ratable" ng-disabled="!account.job_skill_questions_enabled" 
+                | Questions Text Field - not Ratable
+            /! If 'Questions' are enabled then AM can select either 'Questions Text Field - ratable'
+            .radio
+              label
+                input#ratable type="radio" name="job_skill_questions_ratable" ng-value="true" ng-model='account.job_skill_questions_ratable' ng-change="updateJobSkillsFeatures()" ng-checked="account.job_skill_questions_ratable" ng-disabled="!account.job_skill_questions_enabled" 
+                | Questions Text Field - Ratable
+
+            /! If 'Questions Text Field items - Ratable' is selected then AM can select one of the following rating types
+            .row
+            .col-md-6
+              p.text-center Questions Rating Types:
+            .col-md-6
+              .radio
+                label
+                  input#thumbs-up type="radio" name="job_skill_questions_rating_type" value="thumbs-up" ng-model="account.job_skill_questions_rating_type" ng-change="updateJobSkillsFeatures()" ng-checked="account.job_skill_questions_rating_type == 'thumbs-up'" ng-disabled="!account.job_skill_questions_ratable" 
+                  | Thumbs Up
+              .radio
+                label
+                  input#thumbs-up-down type="radio" name="job_skill_questions_rating_type" value="thumbs-up-down" ng-model="account.job_skill_questions_rating_type" ng-change="updateJobSkillsFeatures()" ng-checked="account.job_skill_questions_rating_type == 'thumbs-up-down'" ng-disabled="!account.job_skill_questions_ratable" 
+                  | Thumbs Up/Down
+              .radio
+                label
+                  input#checkboxes type="radio" name="job_skill_questions_rating_type" value="checkboxes" ng-model="account.job_skill_questions_rating_type" ng-change="updateJobSkillsFeatures()" ng-checked="account.job_skill_questions_rating_type == 'checkboxes'" ng-disabled="!account.job_skill_questions_ratable" 
+                  | Checkbox

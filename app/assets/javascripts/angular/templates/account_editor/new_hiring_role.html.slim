@@ -1,0 +1,24 @@
+.modal-header
+  h3.modal-title.text-center
+    span
+      | Add Job (Hiring) Team Role
+    i.glyphicon.glyphicon-remove-circle.pull-right ng-click='closeModal()' 
+.modal-body
+  alert ng-repeat="alert in alerts" type='{{alert.type}}' close="closeAlert($index)" 
+    | {{alert.msg}}
+  form.form-horizontal name='roleForm' role="form" novalidate="true"
+    .form-group ng-class="{ 'has-error' : roleForm.name.$invalid && !roleForm.name.$pristine }" 
+      .col-md-8.col-md-offset-2
+        input#name.form-control type="text" name="name" required="true" ng-model='role.name' placeholder="Enter new Job Team Member Role here"
+        p.help-block ng-show="userForm.name.$invalid && !userForm.name.$pristine" 
+          | Role Name can't be blank
+      i.glyphicon.glyphicon-ok ng-show="!roleForm.name.$invalid"
+    .form-group
+      label.text-left.col-md-offset-2.col-md-5.control-label for="role" Copy permission settings from:
+      .col-md-3
+        select#role.form-control ng-change='updateInterviewGuidesCounts()' ng-model='role.template_id' ng-options='role.id as role.name for role in account.roles' 
+          option value='' None
+.modal-footer
+  div
+    button.btn.btn-primary ng-disabled="roleForm.$invalid" ng-click="save(role)" Add
+    button.btn.btn-warning ng-disabled="roleForm.$invalid" ng-click="saveAndAddAnother(role)" Save and Add Another

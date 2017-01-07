@@ -1,0 +1,12 @@
+.ca-box
+  .tab-list
+    / The LIs below are filters that should trigger an XHR API call to get new data via API and refresh the content in ul.media-list section below
+    ul#tab-list.nav.nav-tabs.visible-xs
+      li.active
+        a data-toggle="tab" href="#i-today"  Today(7)
+      li
+        a data-toggle="tab" href="#i-upcoming"  Upcoming(4)
+      li
+        a data-toggle="tab" href="#i-past"  Past(34)
+  .tab-content
+    .tab-pane.fade.in.active ui-view=""

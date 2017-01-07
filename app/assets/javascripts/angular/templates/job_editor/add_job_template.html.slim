@@ -1,0 +1,19 @@
+.modal-header
+  h3.modal-title.text-center
+    | Add Job Template
+    i.glyphicon.glyphicon-remove-circle.pull-right ng-click="closeModal(true)"
+
+.modal-body
+  form name="jobTemplateForm" show-validation="true" role="form" ng-init="setFormScope(this)"
+    div.form-group
+      | This will save all the general information for this Job as a template to be re-used in the application. Please pick a unique Job Title which clearly represents this job.
+    div.form-group
+      label.required Job Template Title
+      input type="text" name="name" ng-model="$parent.resource.name" class="form-control" placeholder="Job Template Title goes here"
+      span.help-block ng-show="form.jobTemplateForm.name.$invalid" 
+        ul
+          li ng-repeat="msg in validation_errors.name" {{ msg }}
+      
+.modal-footer
+  button.btn.btn-warning ng-click="closeModal()" Cancel
+  button.btn.btn-primary ng-click="saveJobTemplate()" Add Job Template

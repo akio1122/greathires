@@ -1,0 +1,125 @@
+header.job-det
+  h4 
+    | {{job.name}}, {{accountManager()}}
+  p 
+    | {{job_interview.interview_round.name}}
+  a.ico-rounded data-target="#mySchedule" data-toggle="modal"
+    i.fa.fa-calendar
+.job-sched
+  ul.tbl-sched
+    li
+      span.col
+        span.stime Previous
+      span.col
+        span.curr My Interview
+      span.col
+        span.stime Next
+    li
+      span.col
+        a href="#" ng-if="my_index > 0"
+          | {{interviews[my_index - 1].start_time}}
+          br
+          | {{getInterviewName(interviews[my_index - 1])}}
+          br
+          i.fa.fa-map-marker
+          | {{interviews[my_index - 1].location}}
+      span.col
+        a href="#"
+          | {{interviews[my_index].start_time}}
+          br
+          | {{getInterviewName(interviews[my_index])}}
+          br
+          i.fa.fa-map-marker
+          | {{interviews[my_index].location}}
+      span.col
+        a href="#" ng-if="my_index + 1 < interviews.length"
+          | {{interviews[my_index + 1].start_time}}
+          br
+          | {{getInterviewName(interviews[my_index + 1])}}
+          br
+          i.fa.fa-map-marker
+          | {{interviews[my_index + 1].location}}
+  p.clearfix
+ul.nav.nav-pills.nav-stacked.nav-list.visible-xs
+  li
+    a href="3.%20Job%20Requirements.html"
+      h4
+        | Job Requirements
+        i.fa.fa-angle-right
+  li
+    a href="#"
+      | Job Description
+      i.fa.fa-angle-right
+section.cbox.hidden-xs
+  h3.ja-title Job Requirements
+  .panel-group.jaccordion
+    article.panel ng-if="account.job_video_urls_enabled && !job.video_url.isBlank()"
+      div.embed-responsive.embed-responsive-16by9
+        iframe class="embed-responsive-item" src="{{job.video_url}}" allowfullscreen=""
+    article.panel
+      .panel-heading
+        h4.panel-title
+          a.collapsed.pointer data-toggle="collapse" data-target="#jobdesc"
+            i.fa.fa-plus
+            i.fa.fa-minus
+            | Job Description
+      #jobdesc.panel-collapse.collapse
+        .panel-body
+          p 
+            | {{job.description}}
+    article.panel ng-repeat="specification in job.specifications"
+      .panel-heading
+        h4.panel-title
+          a.collapsed.pointer data-toggle="collapse" data-target=="#jobreq{{specification.id}}"
+            i.fa.fa-plus
+            i.fa.fa-minus
+            | {{specification.name}}
+      .panel-collapse.collapse id="jobreq{{specification.id}}"
+        .panel-body
+          ul.q-list.list-type-disc ng-if="!specification.job_specification_items.isEmpty()"
+            li.q-item ng-repeat="item in specification.job_specification_items"
+              p
+                | {{item.description}}
+                ul ng-if="account.job_spec_text_field_allows_sub_bullets && !item.sub_items.isEmpty()"
+                  li ng-repeat="sub_item in item.sub_items"
+                    | {{sub_item}}
+              .row ng-if="account.job_spec_large_text_field_type"
+                .col-xs-6.col-sm-8
+                  div ng-controller="InterviewRatingCtrl" ng-init="initCtrl(item, item_rating_options, 'job_specification_item')"
+                    gh_rating
+
+          div ng-if="account.job_spec_questions_enabled && !specification.job_specification_questions.isEmpty()"
+            h3 Questions
+            ul.q-list ng-class="getListType(account.job_spec_questions_numbered)" ng-if="!specification.job_specification_questions.isEmpty()"
+              li.q-item ng-repeat="question in specification.job_specification_questions"
+                p
+                  | {{question.description}}
+                .row ng-if="account.job_spec_questions_text_field_type"
+                  .col-xs-6.col-sm-8
+                    div ng-controller="InterviewRatingCtrl" ng-init="initCtrl(question, question_rating_options, 'job_specification_question')"
+                      gh_rating
+
+/! Modal - Full Schedule
+#mySchedule.modal.fade aria-hidden="true" aria-labelledby="myScheduleLbl" role="dialog" tabindex="-1"
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close aria-hidden="true" data-dismiss="modal" type="button"  &times;
+        h4#myScheduleLbl.modal-title Full Schedule
+      .modal-body
+        div ng-repeat="(key, value) in interview_schedule"
+          p.sdate
+            span ng-if="getToday() == key"
+              | Today,
+            | {{key}}
+          ul.tbl-sched
+            li ng-repeat="schedule in value"
+              span.col
+                span.stime
+                  | {{schedule.start_time}}
+              span.col 
+                | {{getInterviewName(schedule)}}
+              span.col
+                i.fa.fa-map-marker
+                | {{schedule.location}}
+        p.clearfix

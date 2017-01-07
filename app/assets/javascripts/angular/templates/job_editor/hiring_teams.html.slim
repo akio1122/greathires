@@ -1,0 +1,14 @@
+#jobRoles
+  h3.text-center Hiring Team Set-Up
+  ul.list-unstyled.job-roles
+    li ng-repeat='role in account.hiring_team_roles' 
+      b 
+        | {{role.name}}(s):
+      ul.list-unstyled.users.col-md-offset-1
+        li ng-repeat='job_role in role.job_roles' 
+          .remove.glyphicon.glyphicon-remove-circle ng-click='removeJobRole(job_role)' ng-if='(current_user.id != job_role.user_id || cannotBeAddedRemoved(role)) && can_edit' 
+          | {{job_role.user_full_name}}
+        li ng-if='cannotBeAddedRemoved(role) && can_edit' 
+          button.btn.btn-xs ng-click='openAddUserModal(role)' 
+            i.glyphicon.glyphicon-plus
+          span ng-click='openAddUserModal(role)' Add {{role.name}} 

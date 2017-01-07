@@ -1,0 +1,14 @@
+#containerJobSpecification.panel.panel-default
+  .panel-body
+    div ng-controller="JobSpecificationItemCtrl" 
+      h4.text-center 
+        | {{specficiation_name}} 
+      .well
+        textarea_to_items
+        gh_edit_in_place
+
+    div ng-controller="JobSpecificationQuestionCtrl" ng-show="enable_question" 
+      h4.text-center Questions
+      .well
+        textarea_to_items
+        gh_edit_in_place
